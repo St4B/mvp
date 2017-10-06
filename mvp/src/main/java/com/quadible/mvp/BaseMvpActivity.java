@@ -69,6 +69,5 @@ public abstract class BaseMvpActivity<U extends UiElement<P>, P extends Presente
     public void setPresenter(P presenter) {
         mPresenter = presenter;
     }
-
-
+    
 }
