@@ -64,7 +64,7 @@ public class PresenterProvider {
      * Get a stored presenter based on the unique identifier.
      * @param uuid The unique identifier.
      * @param <P> The type of the presenter.
-     * @return
+     * @return The presenter as <P> type object
      */
     public <P extends Presenter> P get(UUID uuid) {
         Class<P> type = mPresenterTypes.get(uuid);

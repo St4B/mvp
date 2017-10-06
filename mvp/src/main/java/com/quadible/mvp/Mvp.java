@@ -27,6 +27,7 @@ import java.util.UUID;
  *     attaching, detaching, storing and restoring the {@link Presenter} of a {@link UiElement} in
  *     the right time. We storing the presenters in order to not stop their tasks and cache their
  *     actions on UI. When the presenters are restored, they execute their pending {@link Presenter.UiAction}.
+ * </p>
  * <ul>
  *     <li>
  *          We create a presenter when the corresponding UI element is created for the first time.
@@ -56,7 +57,6 @@ import java.util.UUID;
  *         We restore a presenter in order to attach it.
  *     </li>
  * </ul>
- * </p>
  */
 public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
