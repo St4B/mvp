@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'quadible'
+    bintrayName = 'mvp'
+
+    publishedGroupId = 'com.quadible'
+    libraryName = 'mvp'
+    artifact = 'mvp'
+
+    libraryDescription = 'A simple implementation of mvp in android'
+
+    siteUrl = 'https://github.com/St4B/mvp'
+    gitUrl = 'https://github.com/St4B/mvp.git'
+
+    libraryVersion = '0.1-beta'
+
+    developerId = 'St4B'
+    developerName = 'Vaios Tsitsonis'
+    developerEmail = 'v.tsitsonis@quadible.co.uk'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
@@ -19,6 +43,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -29,3 +57,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     testCompile 'junit:junit:4.12'
 }
+
+//Apply at the end!
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
