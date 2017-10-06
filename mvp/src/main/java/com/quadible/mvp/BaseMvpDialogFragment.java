@@ -17,7 +17,7 @@ package com.quadible.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatDialogFragment;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import android.support.v4.app.DialogFragment;
  * </p>
  */
 public abstract class BaseMvpDialogFragment <U extends UiElement<P>, P extends Presenter<U>>
-        extends DialogFragment implements UiElement<P> {
+        extends AppCompatDialogFragment implements UiElement<P> {
 
     private Mvp<U, P> mMvpDelegation = new Mvp<>();
 
