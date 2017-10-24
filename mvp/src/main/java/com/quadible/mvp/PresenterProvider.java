@@ -26,7 +26,7 @@ import java.util.UUID;
  *     The presenters are uniquely identified based on a UUID.
  * </p>
  */
-public class PresenterProvider {
+public class PresenterProvider implements IPresenterProvider{
 
     private SimpleArrayMap<UUID, Presenter> mPresenters = new SimpleArrayMap<>();
 
