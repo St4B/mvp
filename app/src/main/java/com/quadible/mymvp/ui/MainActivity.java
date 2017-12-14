@@ -16,6 +16,10 @@
 package com.quadible.mymvp.ui;
 
 import android.os.Bundle;
+import android.os.Debug;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.quadible.mvp.BaseMvpActivity;
 import com.quadible.mymvp.R;
@@ -25,12 +29,22 @@ import com.quadible.mymvp.uiElement.MainElement;
 /**
 fixme
  */
-public class MainActivity extends BaseMvpActivity<MainElement, MainPresenter> implements MainElement{
+public class MainActivity
+        extends BaseMvpActivity<MainElement, MainPresenter> implements MainElement{
+
+    private Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mButton = findViewById(R.id.btnUpdateLabel);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.setNewText();
+            }
+        });
     }
 
     @Override
@@ -39,4 +53,8 @@ public class MainActivity extends BaseMvpActivity<MainElement, MainPresenter> im
     }
 
 
+    @Override
+    public void updateText(String text) {
+        mButton.setText(text);
+    }
 }

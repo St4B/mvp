@@ -22,4 +22,7 @@ import com.quadible.mymvp.presenter.MainPresenter;
 fixme
  */
 public interface MainElement extends UiElement<MainPresenter> {
+
+    void updateText(String text);
+
 }
