@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/St4B/mvp'
     gitUrl = 'https://github.com/St4B/mvp.git'
 
-    libraryVersion = '0.7-beta'
+    libraryVersion = '0.9-beta'
 
     developerId = 'St4B'
     developerName = 'Vaios Tsitsonis'
@@ -53,7 +53,7 @@ dependencies {
     })
 
     provided 'com.android.support:appcompat-v7:+'
-    implementation 'com.google.code.gson:gson:2.+'
+    provided 'com.google.code.gson:gson:2.+'
 
     testCompile 'junit:junit:4.12'
 }
