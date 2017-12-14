@@ -26,7 +26,7 @@ import android.support.v7.app.AppCompatActivity;
  * </p>
  */
 public abstract class BaseMvpActivity<U extends UiElement<P>, P extends Presenter<U>>
-        extends FragmentActivity implements UiElement<P>{
+        extends AppCompatActivity implements UiElement<P>{
 
     private Mvp<U, P> mMvpDelegation = new Mvp<>();
 
