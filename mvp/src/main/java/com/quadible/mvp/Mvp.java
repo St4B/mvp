@@ -15,6 +15,7 @@
  */
 package com.quadible.mvp;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
@@ -66,6 +67,10 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
     private PresenterProvider mPresenterProvider = PresenterProvider.newInstance();
 
+    public static void install(Application application) {
+        PresenterProvider.init(application);
+    }
+
     /**
      * Start the mvp implementation for the {@link UiElement}. Basically we create a
      * {@link Presenter} and assign a UUID to use for storing/restoring presenters while UI element's
@@ -76,6 +81,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         UUID uuid = UUID.randomUUID();
         mParcelUuid = new ParcelUuid(uuid);
         P presenter = ui.createPresenter();
+        presenter.setUuid(uuid);
         mPresenterProvider.add(uuid, presenter);
         ui.setPresenter(presenter);
     }

@@ -53,6 +53,7 @@ dependencies {
     })
 
     provided 'com.android.support:appcompat-v7:+'
+    implementation 'com.google.code.gson:gson:2.+'
 
     testCompile 'junit:junit:4.12'
 }

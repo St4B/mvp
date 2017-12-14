@@ -16,6 +16,7 @@
 package com.quadible.mvp;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * <p>
@@ -26,11 +27,17 @@ import java.util.ArrayList;
  */
 public abstract class Presenter<U extends UiElement> {
 
-    private ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
+    //We are going to cache them manually, because it is possible to have different class.
+    //So we need to keep reference to the class name also.
+    transient ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
 
     private boolean isAttached = false;
 
     private U mUi;
+
+    private UUID mUuid;
+
+    public Presenter(){}
 
     /**
      * Attach the presenter to the given UI element and execute all the pending UI actions.
@@ -74,7 +81,24 @@ public abstract class Presenter<U extends UiElement> {
             action.act();
         } else {
             mPendingActions.add(action);
+
+            //Something changed while the presenter is detached.
+            //Keep the new state of the presenter in cache.
+            ICache cache = PreferencesCache.newInstance();
+            cache.cache(mUuid, this);
         }
+    }
+
+    ArrayList<UiAction<U>> getPendingActions() {
+        return mPendingActions;
+    }
+
+    void setPendingActions(ArrayList<UiAction<U>> actions) {
+        mPendingActions = actions;
+    }
+
+    void setUuid(UUID uuid) {
+        mUuid = uuid;
     }
 
     /**
@@ -98,7 +122,7 @@ public abstract class Presenter<U extends UiElement> {
          * is being attached.
          * @return The ui element
          */
-        public U getUi() {
+        public final U getUi() {
             return mUi;
         }
 
@@ -106,7 +130,7 @@ public abstract class Presenter<U extends UiElement> {
          * Used in order to set the UI element to which want to act. It should be called internally
          * only while the presenter is being attached.
          */
-        private void setUi(U ui) {
+        private final void setUi(U ui) {
             mUi = ui;
         }
 

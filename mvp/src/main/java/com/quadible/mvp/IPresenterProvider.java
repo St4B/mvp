@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by v.tsitsonis on 11/10/2017.
  */
 
-public interface IPresenterProvider {
+interface IPresenterProvider {
 
     /**
      * Store a presenter based on a unique identifier. Later the corresponding ui element can

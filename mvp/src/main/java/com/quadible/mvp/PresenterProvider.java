@@ -15,34 +15,71 @@
  */
 package com.quadible.mvp;
 
+import android.app.Application;
 import android.support.v4.util.SimpleArrayMap;
 
+import java.util.ArrayList;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * <p>
  *     A singleton that is responsible for storing/restoring presenters while the UI elements are
  *     being recreated. So, we can attach the presenters to the new instances of the UI elements.
- *     The presenters are uniquely identified based on a UUID.
+ *     The presenters are uniquely identified based on a UUID. Also, it is responsible for
+ *     restoring the presenters after the app was killed.
  * </p>
  */
-public class PresenterProvider implements IPresenterProvider{
+class PresenterProvider implements IPresenterProvider{
 
     private SimpleArrayMap<UUID, Presenter> mPresenters = new SimpleArrayMap<>();
 
     private SimpleArrayMap<UUID, Class> mPresenterTypes = new SimpleArrayMap<>();
 
+    private ICache mCache;
+
     private static PresenterProvider sInstance;
 
-    private PresenterProvider() {}
+    private PresenterProvider(Application application) {
+        mCache = PreferencesCache.newInstance(application);
+        restoreIfNeeded();
+    }
 
     /**
      * Get the PresenterProvider.
      * @return The PresenterProvider singleton object.
      */
-    public static PresenterProvider newInstance() {
-        if (sInstance == null) sInstance = new PresenterProvider();
+    protected static PresenterProvider newInstance() {
+        if (sInstance == null) {
+            throw new RuntimeException(
+                    "You must call Mvp.install(Application application) in on create of your Application");
+        }
         return sInstance;
+    }
+
+
+    public static void init(Application application) {
+        if (sInstance == null) sInstance = new PresenterProvider(application);
+    }
+
+    /**
+     * Check if there are presenters in cache and try to restore them. For example, there would be
+     * presenters in cache if application was killed by the system
+     */
+    private void restoreIfNeeded() {
+        //Get all keys
+        ArrayList<UUID> uuids = mCache.getCachedKeys();
+        for (UUID uuid : uuids) {
+            //Get presenter's type in order to re create it
+            Class<? extends Presenter> type = mCache.getType(uuid);
+
+            //Restore presenter
+            Presenter presenter = mCache.get(uuid, type);
+
+            //Keep restored data in order to use it
+            mPresenterTypes.put(uuid, type);
+            mPresenters.put(uuid, presenter);
+        }
     }
 
     /**
@@ -78,6 +115,7 @@ public class PresenterProvider implements IPresenterProvider{
     public void remove(UUID uuid) {
         mPresenterTypes.remove(uuid);
         mPresenters.remove(uuid);
+        mCache.clear(uuid);
     }
 
 }
