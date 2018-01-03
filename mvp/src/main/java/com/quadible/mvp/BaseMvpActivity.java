@@ -28,13 +28,14 @@ import android.support.v7.app.AppCompatActivity;
 public abstract class BaseMvpActivity<U extends UiElement<P>, P extends Presenter<U>>
         extends AppCompatActivity implements UiElement<P>{
 
-    private Mvp<U, P> mMvpDelegation = new Mvp<>();
+    private Mvp<U, P> mMvpDelegation;
 
     protected P mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMvpDelegation = new Mvp<>();
         if (savedInstanceState == null) mMvpDelegation.setUp((U)this);
     }
 

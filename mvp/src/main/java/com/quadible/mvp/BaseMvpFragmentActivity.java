@@ -11,13 +11,14 @@ import android.support.v4.app.FragmentActivity;
 public abstract class BaseMvpFragmentActivity<U extends UiElement<P>, P extends Presenter<U>>
         extends FragmentActivity implements UiElement<P>{
 
-    private Mvp<U, P> mMvpDelegation = new Mvp<>();
+    private Mvp<U, P> mMvpDelegation;
 
     protected P mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMvpDelegation = new Mvp<>();
         if (savedInstanceState == null) mMvpDelegation.setUp((U)this);
     }
 
