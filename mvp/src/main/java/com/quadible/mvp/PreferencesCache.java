@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.quadible.mvp.Presenter.UiAction;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
@@ -150,8 +151,7 @@ class PreferencesCache implements ICache {
         String uuidString = uuid.toString();
         mPresentersPreferences.edit().remove(uuidString).apply();
         mTypesPreferences.edit().remove(uuidString).apply();
-        SharedPreferences actionsPrefs = getActionsPrefs(uuid);
-        actionsPrefs.edit().clear().apply();
+        deleteActionsFile(uuid);
     }
 
     /**
@@ -214,7 +214,18 @@ class PreferencesCache implements ICache {
      * @return
      */
     private SharedPreferences getActionsPrefs(UUID uuid) {
-        String actionsName = uuid.toString() + PREFERENCE_ACTIONS_SUFFIX;
+        String actionsName = getActionsPrefsName(uuid);
         return mApplication.getSharedPreferences(actionsName, Context.MODE_PRIVATE);
+    }
+
+    private String getActionsPrefsName(UUID uuid) {
+        return uuid.toString() + PREFERENCE_ACTIONS_SUFFIX;
+    }
+
+    private void deleteActionsFile(UUID uuid) {
+        File file = mApplication.getFilesDir();
+        String path = file.getParent() + "/shared_prefs/" + getActionsPrefsName(uuid) + ".xml";
+        File sharedPrefs = new File(path);
+        sharedPrefs.delete();
     }
 }
