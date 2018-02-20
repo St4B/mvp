@@ -84,6 +84,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         presenter.setUuid(uuid);
         mPresenterProvider.add(uuid, presenter);
         ui.setPresenter(presenter);
+        ui.onPresenterCreated();
     }
 
     /**
