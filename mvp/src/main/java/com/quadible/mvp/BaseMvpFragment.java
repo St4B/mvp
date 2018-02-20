@@ -74,4 +74,8 @@ public abstract class BaseMvpFragment <U extends UiElement<P>, P extends Present
     public void setPresenter(P presenter) {
         mPresenter = presenter;
     }
+
+    @Override
+    public void onPresenterCreated() {}
+
 }

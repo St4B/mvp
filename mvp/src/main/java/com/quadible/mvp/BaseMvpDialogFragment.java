@@ -75,4 +75,7 @@ public abstract class BaseMvpDialogFragment <U extends UiElement<P>, P extends P
         mPresenter = presenter;
     }
 
+    @Override
+    public void onPresenterCreated() {}
+
 }

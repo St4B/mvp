@@ -36,6 +36,6 @@ public interface UiElement<P extends Presenter> {
      */
     void setPresenter(P presenter);
 
-    default void onPresenterCreated() {}
+    void onPresenterCreated();
 
 }

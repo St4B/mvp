@@ -55,4 +55,7 @@ public abstract class BaseMvpFragmentActivity<U extends UiElement<P>, P extends 
         mPresenter = presenter;
     }
 
+    @Override
+    public void onPresenterCreated() {}
+
 }

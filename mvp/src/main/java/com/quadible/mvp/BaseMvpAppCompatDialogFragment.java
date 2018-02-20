@@ -59,4 +59,7 @@ public abstract class BaseMvpAppCompatDialogFragment  <U extends UiElement<P>, P
         mPresenter = presenter;
     }
 
+    @Override
+    public void onPresenterCreated() {}
+
 }
