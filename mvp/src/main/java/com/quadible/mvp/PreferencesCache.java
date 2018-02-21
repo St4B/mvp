@@ -160,6 +160,8 @@ class PreferencesCache implements ICache {
      * @param actions
      */
     private void saveActions(UUID uuid, ArrayList<UiAction> actions) {
+        if (actions.size() == 0) return;
+        
         SharedPreferences actionsPrefs = getActionsPrefs(uuid);
 
         StringBuilder actionTypes = new StringBuilder();
