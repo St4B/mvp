@@ -27,44 +27,46 @@ import android.support.v4.app.Fragment;
 public abstract class BaseMvpFragment <U extends UiElement<P>, P extends Presenter<U>>
         extends Fragment implements UiElement<P> {
 
-    private Mvp<U, P> mMvpImplementation = new Mvp<>();
+    private Mvp<U, P> mMvpDelegation = new Mvp<>();
 
     protected P mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) mMvpImplementation.setUp((U)this);
+        if (savedInstanceState == null) mMvpDelegation.setUp((U)this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mMvpImplementation.onUiVisibilityChanged((U)this, true);
+        mMvpDelegation.onUiVisibilityChanged((U)this, true);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMvpImplementation.onUiVisibilityChanged((U)this, false);
+        mMvpDelegation.onUiVisibilityChanged((U)this, false);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mMvpImplementation.onSaveInstanceState(outState);
+        mMvpDelegation.onSaveInstanceState(outState);
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) mMvpImplementation.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) mMvpDelegation.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMvpImplementation.destroy();
+    public void onDetach() {
+        super.onDetach();
+        if (getActivity().isFinishing()) {
+            mMvpDelegation.destroy();
+        }
     }
 
     @Override

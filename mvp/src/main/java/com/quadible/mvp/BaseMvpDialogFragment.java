@@ -62,9 +62,11 @@ public abstract class BaseMvpDialogFragment <U extends UiElement<P>, P extends P
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMvpDelegation.destroy();
+    public void onDetach() {
+        super.onDetach();
+        if (getActivity().isFinishing()) {
+            mMvpDelegation.destroy();
+        }
     }
 
     @Override
