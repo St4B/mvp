@@ -19,6 +19,7 @@ import android.app.Application;
 import android.support.v4.util.SimpleArrayMap;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.UUID;
 
@@ -95,6 +96,7 @@ class PresenterProvider implements IPresenterProvider{
 
         mPresenters.put(uuid, presenter);
         mPresenterTypes.put(uuid, presenter.getClass());
+        mCache.cache(uuid, presenter);
     }
 
     /**
