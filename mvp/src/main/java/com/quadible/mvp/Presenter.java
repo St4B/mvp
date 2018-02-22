@@ -27,19 +27,21 @@ import java.util.UUID;
  */
 public abstract class Presenter<U extends UiElement> {
 
-    //We are going to cache them manually, because it is possible to have different class.
+    //We are going to cache them manually, because it is possible to have different classes.
     //So we need to keep reference to the class name also.
-    transient ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
+    private transient ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
 
-    private boolean isAttached = false;
+    private transient boolean isAttached = false;
 
-    private U mUi;
+    private transient U mUi;
 
     private UUID mUuid;
 
-    public Presenter(){}
     private transient ICache mCache = PreferencesCache.newInstance();
 
+    public Presenter(){
+        //fixme restore actions here???
+    }
 
     /**
      * Attach the presenter to the given UI element and execute all the pending UI actions.
