@@ -38,6 +38,8 @@ public abstract class Presenter<U extends UiElement> {
     private UUID mUuid;
 
     public Presenter(){}
+    private transient ICache mCache = PreferencesCache.newInstance();
+
 
     /**
      * Attach the presenter to the given UI element and execute all the pending UI actions.
@@ -59,6 +61,7 @@ public abstract class Presenter<U extends UiElement> {
         }
 
         mPendingActions.clear();
+        mCache.deleteActionsFile(mUuid);
     }
 
     /**

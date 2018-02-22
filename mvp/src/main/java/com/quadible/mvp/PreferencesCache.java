@@ -208,6 +208,8 @@ class PreferencesCache implements ICache {
         }
 
         presenter.setPendingActions(actions);
+
+        deleteActionsFile(uuid);
     }
 
     /**
@@ -224,7 +226,13 @@ class PreferencesCache implements ICache {
         return uuid.toString() + PREFERENCE_ACTIONS_SUFFIX;
     }
 
-    private void deleteActionsFile(UUID uuid) {
+    /**
+     * @deprecated Fixme separate actions' cache from presenters' cache
+     * @param uuid
+     */
+    @Deprecated
+    @Override
+    public void deleteActionsFile(UUID uuid) {
         File file = mApplication.getFilesDir();
         String path = file.getParent() + "/shared_prefs/" + getActionsPrefsName(uuid) + ".xml";
         File sharedPrefs = new File(path);
