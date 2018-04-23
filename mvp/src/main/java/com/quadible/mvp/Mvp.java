@@ -65,7 +65,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
     private ParcelUuid mParcelUuid;
 
-    private PresenterProvider mPresenterProvider = PresenterProvider.newInstance();
+    private IPresenterProvider mPresenterProvider = PresenterProvider.newInstance();
 
     public static void install(Application application) {
         PresenterProvider.init(application);
