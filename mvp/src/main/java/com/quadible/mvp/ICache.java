@@ -48,5 +48,4 @@ interface ICache {
      */
     void clear(UUID uuid);
 
-    void deleteActionsFile(UUID uuid);
 }

@@ -68,7 +68,9 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
     private IPresenterProvider mPresenterProvider = PresenterProvider.newInstance();
 
     public static void install(Application application) {
+        ActionsCacheProvider.init(application);
         PresenterProvider.init(application);
+        PresenterProvider.newInstance().restoreIfNeeded();
     }
 
     /**

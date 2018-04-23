@@ -27,6 +27,8 @@ import java.util.UUID;
  */
 public abstract class Presenter<U extends UiElement> {
 
+    private UUID mUuid;
+
     //We are going to cache them manually, because it is possible to have different classes.
     //So we need to keep reference to the class name also.
     private transient ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
@@ -35,19 +37,14 @@ public abstract class Presenter<U extends UiElement> {
 
     private transient U mUi;
 
-    private UUID mUuid;
-
-    private transient ICache mCache = PreferencesCache.newInstance();
-
-    public Presenter(){
-        //fixme restore actions here???
-    }
-
     /**
      * Presenter was restored. Probably the application was killed by the OS. Take an action if
      * needed by implementing this method.
      */
-    protected void onRestore() {}
+    protected void onRestore() {
+        IActionsCache<UiAction<U>> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
+        mPendingActions = actionsCache.restoreActions();
+    }
 
     /**
      * Attach the presenter to the given UI element and execute all the pending UI actions.
@@ -69,7 +66,8 @@ public abstract class Presenter<U extends UiElement> {
         }
 
         mPendingActions.clear();
-        mCache.deleteActionsFile(mUuid);
+        IActionsCache<UiAction<U>> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
+        actionsCache.delete();
     }
 
     /**
@@ -97,15 +95,11 @@ public abstract class Presenter<U extends UiElement> {
             //Keep the new state of the presenter in cache.
             ICache cache = PreferencesCache.newInstance();
             cache.cache(mUuid, this);
+
+            IActionsCache<UiAction<U>> actionsCache =
+                    ActionsCacheProvider.newInstance().provide(mUuid);
+            actionsCache.saveActions(mPendingActions);
         }
-    }
-
-    ArrayList<UiAction<U>> getPendingActions() {
-        return mPendingActions;
-    }
-
-    void setPendingActions(ArrayList<UiAction<U>> actions) {
-        mPendingActions = actions;
     }
 
     void setUuid(UUID uuid) {
@@ -141,7 +135,7 @@ public abstract class Presenter<U extends UiElement> {
          * Used in order to set the UI element to which want to act. It should be called internally
          * only while the presenter is being attached.
          */
-        private final void setUi(U ui) {
+        private void setUi(U ui) {
             mUi = ui;
         }
 

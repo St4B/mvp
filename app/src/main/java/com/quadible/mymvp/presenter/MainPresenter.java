@@ -27,10 +27,7 @@ public class MainPresenter extends Presenter<MainElement> {
 
     public MainPresenter(){}
 
-    @Override
-    protected void onRestore() {
-        post(new UiUpdater());
-    }
+
 
     public void setNewText(){
         new Task().execute();

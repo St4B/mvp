@@ -43,7 +43,6 @@ class PresenterProvider implements IPresenterProvider{
 
     private PresenterProvider(Application application) {
         mCache = PreferencesCache.newInstance(application);
-        restoreIfNeeded();
     }
 
     /**
@@ -67,7 +66,7 @@ class PresenterProvider implements IPresenterProvider{
      * Check if there are presenters in cache and try to restore them. For example, there would be
      * presenters in cache if application was killed by the system
      */
-    private void restoreIfNeeded() {
+    protected void restoreIfNeeded() {
         //Get all keys
         ArrayList<UUID> uuids = mCache.getCachedKeys();
         for (UUID uuid : uuids) {
