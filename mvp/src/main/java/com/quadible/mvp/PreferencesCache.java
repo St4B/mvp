@@ -208,6 +208,7 @@ class PreferencesCache implements ICache {
         }
 
         presenter.setPendingActions(actions);
+        presenter.onRestore();
 
         deleteActionsFile(uuid);
     }

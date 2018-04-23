@@ -27,6 +27,11 @@ public class MainPresenter extends Presenter<MainElement> {
 
     public MainPresenter(){}
 
+    @Override
+    protected void onRestore() {
+        post(new UiUpdater());
+    }
+
     public void setNewText(){
         new Task().execute();
     }
@@ -54,15 +59,11 @@ public class MainPresenter extends Presenter<MainElement> {
 
     private class UiUpdater extends UiAction<MainElement> {
 
-        public UiUpdater(){}
-
         @Override
         public void act() {
             final String text = "TSIKABOOM!";
             getUi().updateText(text);
         }
     }
-
-
 
 }

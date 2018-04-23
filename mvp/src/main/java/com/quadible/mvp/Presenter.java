@@ -44,6 +44,12 @@ public abstract class Presenter<U extends UiElement> {
     }
 
     /**
+     * Presenter was restored. Probably the application was killed by the OS. Take an action if
+     * needed by implementing this method.
+     */
+    protected void onRestore() {}
+
+    /**
      * Attach the presenter to the given UI element and execute all the pending UI actions.
      * @param ui The ui element to which we want to attach the presenter
      */
