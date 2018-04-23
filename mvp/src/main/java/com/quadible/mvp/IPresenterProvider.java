@@ -36,4 +36,6 @@ interface IPresenterProvider {
      */
     void remove(UUID uuid);
 
+    void clear();
+
 }
