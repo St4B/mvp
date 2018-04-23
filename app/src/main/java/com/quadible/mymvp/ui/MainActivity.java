@@ -17,6 +17,8 @@ package com.quadible.mymvp.ui;
 
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,6 +47,12 @@ public class MainActivity
                 mPresenter.setNewText();
             }
         });
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        TimerFragment fragment = new TimerFragment();
+        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
