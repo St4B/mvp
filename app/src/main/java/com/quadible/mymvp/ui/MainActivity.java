@@ -16,12 +16,10 @@
 package com.quadible.mymvp.ui;
 
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.quadible.mvp.BaseMvpActivity;
 import com.quadible.mymvp.R;
