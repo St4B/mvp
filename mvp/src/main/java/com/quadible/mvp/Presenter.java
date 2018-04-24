@@ -35,6 +35,8 @@ public abstract class Presenter<U extends UiElement> {
 
     private transient boolean isAttached = false;
 
+    private transient boolean isRemoved = false;
+
     private transient U mUi;
 
     /**
@@ -78,6 +80,10 @@ public abstract class Presenter<U extends UiElement> {
         mUi = null;
     }
 
+    void setRemoved() {
+        isRemoved = true;
+    }
+
     /**
      * Post a {@link UiAction}. If presenter is attached, the action will be executed immediately.
      * In other case the actions will be cached and they will be executed when presenter is attached
@@ -88,7 +94,9 @@ public abstract class Presenter<U extends UiElement> {
         if (isAttached) {
             action.setUi(mUi);
             action.act();
-        } else {
+        } else if (!isRemoved){
+            //if presenter is going to be removed we do not want to cache actions
+
             mPendingActions.add(action);
 
             //Something changed while the presenter is detached.

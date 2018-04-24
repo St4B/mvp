@@ -18,9 +18,11 @@ package com.quadible.mvp;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -68,11 +70,13 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
     private IPresenterProvider mPresenterProvider = PresenterProvider.newInstance();
 
+    private static ArrayList<ParcelUuid> sMvpImplementations = new ArrayList<>();
+
     public static void install(Application application) {
+        Debug.waitForDebugger();
         ActionsCacheProvider.init(application);
         PresenterProvider.init(application);
         PresenterProvider.newInstance().restoreIfNeeded();
-        application.startService(new Intent(application, OnExitDetectionService.class));
     }
 
     /**
@@ -89,6 +93,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         mPresenterProvider.add(uuid, presenter);
         ui.setPresenter(presenter);
         ui.onPresenterCreated();
+        sMvpImplementations.add(mParcelUuid);
     }
 
     /**
@@ -145,6 +150,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      */
     public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         mParcelUuid = savedInstanceState.getParcelable(BUNDLE_KEY_PRESENTER_UUID);
+        sMvpImplementations.add(mParcelUuid);
     }
 
     /**
@@ -154,6 +160,12 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
     public void destroy() {
         UUID uuid = mParcelUuid.getUuid();
         mPresenterProvider.remove(uuid);
+        sMvpImplementations.remove(mParcelUuid);
+
+        //Perform clean up in order to remove trashes. They may be occurred from app crashes.
+        if (sMvpImplementations.size() == 0) {
+            mPresenterProvider.clear();
+        }
     }
 
 }

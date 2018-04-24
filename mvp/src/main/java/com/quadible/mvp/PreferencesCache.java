@@ -142,7 +142,6 @@ class PreferencesCache implements ICache {
         mPresentersPreferences.edit().remove(uuidString).apply();
         mTypesPreferences.edit().remove(uuidString).apply();
         ActionsCacheProvider.newInstance().provide(uuid).delete();
-
     }
 
 }

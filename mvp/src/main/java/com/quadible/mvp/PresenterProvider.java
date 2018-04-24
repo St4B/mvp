@@ -115,6 +115,8 @@ class PresenterProvider implements IPresenterProvider{
      */
     public void remove(UUID uuid) {
         mPresenterTypes.remove(uuid);
+        Presenter presenter = mPresenters.get(uuid);
+        presenter.setRemoved();
         mPresenters.remove(uuid);
         mCache.clear(uuid);
     }
