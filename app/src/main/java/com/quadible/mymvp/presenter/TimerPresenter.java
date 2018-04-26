@@ -17,6 +17,12 @@ public class TimerPresenter extends Presenter<TimerElement> {
         new Timer().execute();
     }
 
+    @Override
+    protected void onRestore() {
+        super.onRestore();
+        startTimer();
+    }
+
     private class Timer extends AsyncTask<Void, Void, Void> {
 
         @Override
