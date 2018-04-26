@@ -27,7 +27,10 @@ import com.quadible.mymvp.presenter.MainPresenter;
 import com.quadible.mymvp.uiElement.MainElement;
 
 /**
-fixme
+ * <p>
+ *     Example of {@link BaseMvpActivity}. It has button that when it is pressed calls
+ *     {@link MainPresenter#setNewText()}. Also it uses a {@link TimerFragment}.
+ * </p>
  */
 public class MainActivity
         extends BaseMvpActivity<MainElement, MainPresenter> implements MainElement{
@@ -45,19 +48,27 @@ public class MainActivity
                 mPresenter.setNewText();
             }
         });
+        addFragment();
+    }
 
+    private void addFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        TimerFragment fragment = new TimerFragment();
-        fragmentTransaction.add(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
+
+        TimerFragment fragment =
+                (TimerFragment) fragmentManager.findFragmentByTag(TimerFragment.TAG);
+        if (fragment == null) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            fragment = new TimerFragment();
+            fragmentTransaction.add(R.id.fragment_container, fragment, TimerFragment.TAG);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
     public MainPresenter createPresenter() {
         return new MainPresenter();
     }
-
 
     @Override
     public void updateText(String text) {

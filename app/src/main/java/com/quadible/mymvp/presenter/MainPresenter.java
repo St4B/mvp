@@ -21,13 +21,18 @@ import com.quadible.mvp.Presenter;
 import com.quadible.mymvp.uiElement.MainElement;
 
 /**
- * fixme
+ * <p>
+ *     The {@link Presenter} of {@link com.quadible.mymvp.ui.MainActivity}. Whenever the
+ *     {@link MainPresenter#setNewText()} is called the presenter waits for a while and then
+ *     uses {@link UiUpdater} to change text of its corresponding UiElement a.k.a
+ *     {@link com.quadible.mymvp.ui.MainActivity}.
+ * </p>
  */
 public class MainPresenter extends Presenter<MainElement> {
 
+    private static final int SECONDS = 10000;
+
     public MainPresenter(){}
-
-
 
     public void setNewText(){
         new Task().execute();
@@ -40,7 +45,7 @@ public class MainPresenter extends Presenter<MainElement> {
             try {
                 //Wow! A really heavy task! We have time to put the app in the background and kill
                 //it in order to check if presenter is consistent (even if the app was killed :D)
-                Thread.sleep(10000);
+                Thread.sleep(SECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

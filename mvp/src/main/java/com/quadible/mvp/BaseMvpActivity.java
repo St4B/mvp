@@ -21,7 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  * <p>
- *     Implement Mvp pattern to Activities.
+ *     Implement Mvp pattern to AppCompatActivities.
  * </p>
  */
 public abstract class BaseMvpActivity<U extends UiElement<P>, P extends Presenter<U>>

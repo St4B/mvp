@@ -52,7 +52,7 @@ public abstract class Presenter<U extends UiElement> {
      * Attach the presenter to the given UI element and execute all the pending UI actions.
      * @param ui The ui element to which we want to attach the presenter
      */
-    protected void attach(U ui) {
+    void attach(U ui) {
         mUi = ui;
         isAttached = true;
         if (mPendingActions.size() > 0) executePendingUiActions();
@@ -75,7 +75,7 @@ public abstract class Presenter<U extends UiElement> {
     /**
      * Detach presenter from its UI element.
      */
-    protected void detach() {
+    void detach() {
         isAttached = false;
         mUi = null;
     }
@@ -102,7 +102,7 @@ public abstract class Presenter<U extends UiElement> {
             //Something changed while the presenter is detached.
             //Keep the new state of the presenter in cache.
             ICache cache = PreferencesCache.newInstance();
-            cache.cache(mUuid, this);
+            cache.add(mUuid, this);
 
             IActionsCache<UiAction<U>> actionsCache =
                     ActionsCacheProvider.newInstance().provide(mUuid);

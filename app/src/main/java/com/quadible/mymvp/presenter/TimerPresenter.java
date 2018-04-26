@@ -6,12 +6,18 @@ import com.quadible.mvp.Presenter;
 import com.quadible.mymvp.uiElement.TimerElement;
 
 /**
- * Created by v.tsitsonis on 23/4/2018.
+ * <p>
+ *     The {@link Presenter} of {@link com.quadible.mymvp.ui.TimerFragment}. Whenever the
+ *     {@link TimerPresenter#startTimer()} is called the presenter waits for a while and then
+ *     uses {@link UpdateTime} to change text of its corresponding UiElement a.k.a
+ *     {@link com.quadible.mymvp.ui.TimerFragment}.
+ * </p>
  */
-
 public class TimerPresenter extends Presenter<TimerElement> {
 
     private int mSeconds = 0;
+
+    private static final int SLEEP_SECONDS = 1000;
 
     public void startTimer() {
         new Timer().execute();
@@ -28,7 +34,7 @@ public class TimerPresenter extends Presenter<TimerElement> {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(SLEEP_SECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

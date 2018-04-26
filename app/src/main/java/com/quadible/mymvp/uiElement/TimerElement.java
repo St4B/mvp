@@ -4,9 +4,10 @@ import com.quadible.mvp.UiElement;
 import com.quadible.mymvp.presenter.TimerPresenter;
 
 /**
- * Created by v.tsitsonis on 23/4/2018.
+ * <p>
+ *     The actions that {@link TimerPresenter} can take (on {@link com.quadible.mymvp.ui.TimerFragment})
+ * </p>
  */
-
 public interface TimerElement extends UiElement<TimerPresenter> {
 
     void setTime(int seconds);

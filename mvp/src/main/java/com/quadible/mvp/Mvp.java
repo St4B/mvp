@@ -99,7 +99,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      * @param ui The UI element
      * @param isVisible If visibility changes to visible
      */
-    public void onUiVisibilityChanged(U ui, boolean isVisible) {
+    void onUiVisibilityChanged(U ui, boolean isVisible) {
         if (isVisible) {
             attachPresenter(ui);
         } else {
@@ -135,7 +135,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      * When the UI element is recreated it will retrieve its presenter based on this UUID.
      * @param outState Where to save the UUID.
      */
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(BUNDLE_KEY_PRESENTER_UUID, mParcelUuid);
     }
 
@@ -145,7 +145,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      * {@link PresenterProvider}.
      * @param savedInstanceState From where to retrieve UUID.
      */
-    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         mParcelUuid = savedInstanceState.getParcelable(BUNDLE_KEY_PRESENTER_UUID);
         sMvpImplementations.add(mParcelUuid);
     }
@@ -154,7 +154,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      * Remove {@link Presenter} from {@link PresenterProvider}. The {@link UiElement} is removed and
      * as a result the presenter is not needed any more.
      */
-    public void destroy() {
+    void destroy() {
         UUID uuid = mParcelUuid.getUuid();
         mPresenterProvider.remove(uuid);
         sMvpImplementations.remove(mParcelUuid);

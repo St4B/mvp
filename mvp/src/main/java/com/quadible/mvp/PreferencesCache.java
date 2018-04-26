@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 Quadible Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.quadible.mvp;
 
 import android.app.Application;
@@ -11,13 +26,11 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- *
- * //fixme
- * also delegate work
- *
- * Created by v.tsitsonis on 14/12/2017.
+ * <p>
+ *     An implementation of {@link ICache} which uses shared preferences in order to store/restore
+ *     {@link Presenter}.
+ * </p>
  */
-
 class PreferencesCache implements ICache {
 
     private static final String PREFERENCE_PRESENTERS_SUFFIX = ".mvpPresenters";
@@ -43,7 +56,7 @@ class PreferencesCache implements ICache {
         mTypesPreferences = mApplication.getSharedPreferences(typesName, Context.MODE_PRIVATE);
     }
 
-    protected static synchronized PreferencesCache newInstance() {
+    static synchronized PreferencesCache newInstance() {
         if (sInstance == null) {
             throw new RuntimeException(
                     "You must call Mvp.install(Application application) in on create of your Application");
@@ -51,7 +64,7 @@ class PreferencesCache implements ICache {
         return sInstance;
     }
 
-    protected static synchronized PreferencesCache newInstance(Application application) {
+    static synchronized PreferencesCache newInstance(Application application) {
         if (sInstance == null) {
             sInstance = new PreferencesCache(application);
         }
@@ -59,8 +72,8 @@ class PreferencesCache implements ICache {
     }
 
     /**
-     * fixme
-     * @return
+     * Get the ids of all presenters that were stored in cache.
+     * @return List of cached presenter's ids.
      */
     @Override
     public ArrayList<UUID> getCachedKeys() {
@@ -76,12 +89,12 @@ class PreferencesCache implements ICache {
     }
 
     /**
-     * fixme
-     * @param uuid
-     * @param presenter
+     * Store a {@link Presenter} in {@link ICache} using an id (corresponds to presenter's id).
+     * @param uuid The id to use.
+     * @param presenter The presenter to store
      */
     @Override
-    public void cache(UUID uuid, Presenter presenter) {
+    public void add(UUID uuid, Presenter presenter) {
         Gson gson = new Gson();
         String serializedPresenter = gson.toJson(presenter);
         String uuidString = uuid.toString();
@@ -96,11 +109,11 @@ class PreferencesCache implements ICache {
     }
 
     /**
-     * fixme
-     * @param uuid
-     * @param type
-     * @param <T>
-     * @return
+     * Get the {@link Presenter} that was stored in {@link ICache} with the given id.
+     * @param uuid The {@link Presenter}'s id.
+     * @param type The {@link Presenter}'s class. (Used in order to deserialize it).
+     * @param <T> The {@link Presenter}'s type.
+     * @return The stored {@link Presenter}.
      */
     @Override
     public <T extends Presenter>Presenter get(UUID uuid, Class<T> type) {
@@ -113,10 +126,10 @@ class PreferencesCache implements ICache {
     }
 
     /**
-     * fixme
-     * @param uuid
-     * @param <T>
-     * @return
+     * Get {@link Presenter}'s class. Is needed in order to deserialize it.
+     * @param uuid The {@link Presenter}'s id
+     * @param <T> The expecting {@link Presenter}'s type
+     * @return The {@link Presenter}'s class
      */
     @Override
     public <T extends Presenter> Class<T> getType(UUID uuid) {
@@ -133,11 +146,12 @@ class PreferencesCache implements ICache {
     }
 
     /**
-     * fixme
-     * @param uuid
+     * Removes a {@link Presenter} from cache (and its corresponding resources, e.g. cached actions
+     * - {@link IActionsCache})
+     * @param uuid The {@link Presenter}'s id.
      */
     @Override
-    public void clear(UUID uuid) {
+    public void remove(UUID uuid) {
         String uuidString = uuid.toString();
         mPresentersPreferences.edit().remove(uuidString).apply();
         mTypesPreferences.edit().remove(uuidString).apply();

@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 Quadible Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.quadible.mvp;
 
 import android.app.Application;
@@ -12,9 +27,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by v.tsitsonis on 23/4/2018.
+ * <p>
+ *     Implementation of ({@link IActionsCache}) that uses the shared preferences as a persistent
+ *     storage.
+ *     <br/>
+ *     It creates a different shared preferences file per {@link Presenter} using it's id in order
+ *     to distinguish them.
+ *     <br/>
+ *     The logic here is to save the actions using as key the position of the {@link UiAction} inside
+ *     the pending action's list. This helps us to avoid the overhead of continuous serializing/
+ *     deserializing when we had a new pending action, if we saved the list at a whole.
+ * </p>
  */
-
 class ActionsCache<A extends UiAction> implements IActionsCache<A> {
 
     private static final String PREFERENCE_ACTIONS_SUFFIX = ".mvpActions";
@@ -35,6 +59,10 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
         mActionsPreferences = mApplication.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
     }
 
+    /**
+     * Save {@link Presenter}'s pending actions in a persistent storage.
+     * @param actions Actions that we want to save.
+     */
     @Override
     public void saveActions(ArrayList<A> actions) {
         if (actions.size() == 0) return;
@@ -56,6 +84,10 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
         mActionsPreferences.edit().putString(KEY_ACTIONS_TYPES, actionTypes.toString()).commit();
     }
 
+    /**
+     * Return pending actions from the persistent storage. Used after {@link Presenter} was restored.
+     * @return The pending actions that were stored.
+     */
     @Override
     public ArrayList<A> restoreActions() {
         String typesInString = mActionsPreferences.getString(KEY_ACTIONS_TYPES, "");
@@ -79,6 +111,9 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
         return actions;
     }
 
+    /**
+     * Delete actions from persistent storage.
+     */
     @Override
     public void delete() {
         File file = mApplication.getFilesDir();

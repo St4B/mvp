@@ -28,7 +28,8 @@ import java.util.UUID;
  *     A singleton that is responsible for storing/restoring presenters while the UI elements are
  *     being recreated. So, we can attach the presenters to the new instances of the UI elements.
  *     The presenters are uniquely identified based on a UUID. Also, it is responsible for
- *     restoring the presenters after the app was killed.
+ *     restoring the presenters after the app was killed. The action each {@link Presenter} is going
+ *     to take on restore is defined in {@link Presenter#onRestore()}.
  * </p>
  */
 class PresenterProvider implements IPresenterProvider{
@@ -49,7 +50,7 @@ class PresenterProvider implements IPresenterProvider{
      * Get the PresenterProvider.
      * @return The PresenterProvider singleton object.
      */
-    protected static PresenterProvider newInstance() {
+    static PresenterProvider newInstance() {
         if (sInstance == null) {
             throw new RuntimeException(
                     "You must call Mvp.install(Application application) in on create of your Application");
@@ -57,16 +58,15 @@ class PresenterProvider implements IPresenterProvider{
         return sInstance;
     }
 
-
-    public static void init(Application application) {
+    static void init(Application application) {
         if (sInstance == null) sInstance = new PresenterProvider(application);
     }
 
     /**
      * Check if there are presenters in cache and try to restore them. For example, there would be
-     * presenters in cache if application was killed by the system
+     * presenters in cache if application was killed by the OS.
      */
-    protected void restoreIfNeeded() {
+    void restoreIfNeeded() {
         //Get all keys
         ArrayList<UUID> uuids = mCache.getCachedKeys();
         for (UUID uuid : uuids) {
@@ -89,13 +89,14 @@ class PresenterProvider implements IPresenterProvider{
      * @param presenter The presenter.
      * @param <P> The type of the presenter.
      */
+    @Override
     public <P extends Presenter> void add(UUID uuid, P presenter) {
         if (mPresenters.containsKey(uuid)) {} //FIXME
         //if presenter == null fixme
 
         mPresenters.put(uuid, presenter);
         mPresenterTypes.put(uuid, presenter.getClass());
-        mCache.cache(uuid, presenter);
+        mCache.add(uuid, presenter);
     }
 
     /**
@@ -104,6 +105,7 @@ class PresenterProvider implements IPresenterProvider{
      * @param <P> The type of the presenter.
      * @return The presenter as <P> type object
      */
+    @Override
     public <P extends Presenter> P get(UUID uuid) {
         Class<P> type = mPresenterTypes.get(uuid);
         return type.cast(mPresenters.get(uuid));
@@ -113,14 +115,20 @@ class PresenterProvider implements IPresenterProvider{
      * Remove the {@link Presenter} which corresponds to the given uuid.
      * @param uuid The unique identifier.
      */
+    @Override
     public void remove(UUID uuid) {
         mPresenterTypes.remove(uuid);
         Presenter presenter = mPresenters.get(uuid);
         presenter.setRemoved();
         mPresenters.remove(uuid);
-        mCache.clear(uuid);
+        mCache.remove(uuid);
     }
 
+    /**
+     * Clear all the presenters. Namely the presenters that were created in our current session as
+     * well as the presenters that were stored in previous sessions and never been restored (possible
+     * after crash).
+     */
     @Override
     public void clear() {
         ArrayList<UUID> uuids = mCache.getCachedKeys();

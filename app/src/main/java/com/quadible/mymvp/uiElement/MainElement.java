@@ -19,7 +19,9 @@ import com.quadible.mvp.UiElement;
 import com.quadible.mymvp.presenter.MainPresenter;
 
 /**
-fixme
+ * <p>
+ *     The actions that {@link MainPresenter} can take (on {@link com.quadible.mymvp.ui.MainActivity})
+ * </p>
  */
 public interface MainElement extends UiElement<MainPresenter> {
 
