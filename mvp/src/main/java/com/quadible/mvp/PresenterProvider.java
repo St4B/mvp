@@ -16,11 +16,10 @@
 package com.quadible.mvp;
 
 import android.app.Application;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.util.SimpleArrayMap;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -34,9 +33,9 @@ import java.util.UUID;
  */
 class PresenterProvider implements IPresenterProvider{
 
-    private SimpleArrayMap<UUID, Presenter> mPresenters = new SimpleArrayMap<>();
+    private ArrayMap<UUID, Presenter> mPresenters = new ArrayMap<>();
 
-    private SimpleArrayMap<UUID, Class> mPresenterTypes = new SimpleArrayMap<>();
+    private ArrayMap<UUID, Class> mPresenterTypes = new ArrayMap<>();
 
     private ICache mCache;
 
@@ -91,8 +90,9 @@ class PresenterProvider implements IPresenterProvider{
      */
     @Override
     public <P extends Presenter> void add(UUID uuid, P presenter) {
-        if (mPresenters.containsKey(uuid)) {} //FIXME
-        //if presenter == null fixme
+        Check.requireNonNull(uuid);
+        Check.requireNonNull(presenter);
+        Check.requireNotExist(uuid, mPresenters);
 
         mPresenters.put(uuid, presenter);
         mPresenterTypes.put(uuid, presenter.getClass());
@@ -107,6 +107,7 @@ class PresenterProvider implements IPresenterProvider{
      */
     @Override
     public <P extends Presenter> P get(UUID uuid) {
+        Check.requireNonNull(uuid);
         Class<P> type = mPresenterTypes.get(uuid);
         return type.cast(mPresenters.get(uuid));
     }
@@ -117,11 +118,15 @@ class PresenterProvider implements IPresenterProvider{
      */
     @Override
     public void remove(UUID uuid) {
+        Check.requireNonNull(uuid);
         mPresenterTypes.remove(uuid);
         Presenter presenter = mPresenters.get(uuid);
-        presenter.setRemoved();
-        mPresenters.remove(uuid);
-        mCache.remove(uuid);
+
+        if (presenter != null) {
+            presenter.setRemoved();
+            mPresenters.remove(uuid);
+            mCache.remove(uuid);
+        }
     }
 
     /**

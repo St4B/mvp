@@ -45,15 +45,12 @@ class PreferencesCache implements ICache {
 
     private final String PREFIX_NAME;
 
-    private final Application mApplication;
-
     private PreferencesCache(Application application) {
-        mApplication = application;
-        PREFIX_NAME = mApplication.getPackageName();
+        PREFIX_NAME = application.getPackageName();
         String prefsName = PREFIX_NAME + PREFERENCE_PRESENTERS_SUFFIX;
-        mPresentersPreferences = mApplication.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
+        mPresentersPreferences = application.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
         String typesName = PREFIX_NAME + PREFERENCE_TYPES_SUFFIX;
-        mTypesPreferences = mApplication.getSharedPreferences(typesName, Context.MODE_PRIVATE);
+        mTypesPreferences = application.getSharedPreferences(typesName, Context.MODE_PRIVATE);
     }
 
     static synchronized PreferencesCache newInstance() {
@@ -95,6 +92,9 @@ class PreferencesCache implements ICache {
      */
     @Override
     public void add(UUID uuid, Presenter presenter) {
+        Check.requireNonNull(uuid);
+        Check.requireNonNull(presenter);
+
         Gson gson = new Gson();
         String serializedPresenter = gson.toJson(presenter);
         String uuidString = uuid.toString();
@@ -117,8 +117,11 @@ class PreferencesCache implements ICache {
      */
     @Override
     public <T extends Presenter>Presenter get(UUID uuid, Class<T> type) {
+        Check.requireNonNull(uuid);
+        Check.requireNonNull(type);
+
         String uuidString = uuid.toString();
-        String serializedPresenter = mPresentersPreferences.getString(uuidString, "");
+        String serializedPresenter = mPresentersPreferences.getString(uuidString, "{}");
         Gson gson = new Gson();
         T presenter =  gson.fromJson(serializedPresenter, type);
         presenter.onRestore();
@@ -133,6 +136,8 @@ class PreferencesCache implements ICache {
      */
     @Override
     public <T extends Presenter> Class<T> getType(UUID uuid) {
+        Check.requireNonNull(uuid);
+
         String uuidString = uuid.toString();
         String typeName = mTypesPreferences.getString(uuidString, "");
         Class<T> cls = null;
@@ -152,6 +157,8 @@ class PreferencesCache implements ICache {
      */
     @Override
     public void remove(UUID uuid) {
+        Check.requireNonNull(uuid);
+
         String uuidString = uuid.toString();
         mPresentersPreferences.edit().remove(uuidString).apply();
         mTypesPreferences.edit().remove(uuidString).apply();

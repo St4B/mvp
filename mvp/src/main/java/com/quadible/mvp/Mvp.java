@@ -86,6 +86,12 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         UUID uuid = UUID.randomUUID();
         mParcelUuid = new ParcelUuid(uuid);
         P presenter = ui.createPresenter();
+
+        if (presenter == null) {
+            throw new IllegalArgumentException("createPresenter() of "
+                    + ui.getClass().getName() + " should not return null!");
+        }
+
         presenter.setUuid(uuid);
         mPresenterProvider.add(uuid, presenter);
         ui.setPresenter(presenter);

@@ -53,7 +53,7 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
 
     private final String mFileName;
 
-    public ActionsCache(Application application, UUID uuid) {
+    ActionsCache(Application application, UUID uuid) {
         mApplication = application;
         mFileName = uuid.toString() + PREFERENCE_ACTIONS_SUFFIX;
         mActionsPreferences = mApplication.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
@@ -65,7 +65,7 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
      */
     @Override
     public void saveActions(ArrayList<A> actions) {
-        if (actions.size() == 0) return;
+        if (actions == null || actions.size() == 0) return;
 
         StringBuilder actionTypes = new StringBuilder();
         Gson gson = new Gson();
@@ -97,7 +97,7 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
 
         for (int i = 0; i < types.length; i++) {
             String typeName = types[i];
-            String serializedAction = mActionsPreferences.getString(Integer.toString(i), "");
+            String serializedAction = mActionsPreferences.getString(Integer.toString(i), "{}");
             Class<? extends Presenter.UiAction> cls;
             try {
                 cls = (Class<? extends A>) Class.forName(typeName);

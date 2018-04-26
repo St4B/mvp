@@ -37,12 +37,16 @@ public interface UiElement<P extends Presenter> {
     void setPresenter(P presenter);
 
     /**
-     * Callback which informs that the {@link Presenter} is created and we are ready to take action.
-     * Basically we want to avoid taking actions in {@link Presenter}'s constructor. In this
-     * callback we are sure that mvp was set up successfully and we are ready to rock the world!!!
-     * <br/>
-     * This is not called on restore after app is killed from the OS. On restore process is internal
-     * part of {@link Presenter}.
+     * <p>
+     *     Callback which informs that the {@link Presenter} is created and we are ready to take
+     *     action. Basically we want to avoid taking actions in {@link Presenter}'s constructor. In
+     *     this callback we are sure that mvp was set up successfully and we are ready to rock the
+     *     world!!!
+     * </p>
+     * <p>
+     *     This is not called on restore after app is killed from the OS. On restore process is
+     *     internal part of {@link Presenter}.
+     * </p>
      */
     void onPresenterCreated();
 
