@@ -78,6 +78,10 @@ public abstract class Presenter<U extends UiElement> {
     void detach() {
         isAttached = false;
         mUi = null;
+
+        //Save the last "visible" instance of presenter
+        ICache cache = PreferencesCache.newInstance();
+        cache.add(mUuid, this);
     }
 
     void setRemoved() {
