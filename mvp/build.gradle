@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/St4B/mvp'
     gitUrl = 'https://github.com/St4B/mvp.git'
 
-    libraryVersion = '0.19-beta'
+    libraryVersion = '0.20-beta'
 
     developerId = 'St4B'
     developerName = 'Vaios Tsitsonis'
