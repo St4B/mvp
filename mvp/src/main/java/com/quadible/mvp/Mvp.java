@@ -21,6 +21,8 @@ import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -68,7 +70,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
     private IPresenterProvider mPresenterProvider = PresenterProvider.newInstance();
 
-    private static ArrayList<ParcelUuid> sMvpImplementations = new ArrayList<>();
+    public static Set<String> sMvpImplementations = new HashSet<>();
 
     public static void install(Application application) {
         ActionsCacheProvider.init(application);
@@ -96,7 +98,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         mPresenterProvider.add(uuid, presenter);
         ui.setPresenter(presenter);
         ui.onPresenterCreated();
-        sMvpImplementations.add(mParcelUuid);
+        sMvpImplementations.add(mParcelUuid.toString());
     }
 
     /**
@@ -153,7 +155,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      */
     void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         mParcelUuid = savedInstanceState.getParcelable(BUNDLE_KEY_PRESENTER_UUID);
-        sMvpImplementations.add(mParcelUuid);
+        sMvpImplementations.add(mParcelUuid.toString());
     }
 
     /**
