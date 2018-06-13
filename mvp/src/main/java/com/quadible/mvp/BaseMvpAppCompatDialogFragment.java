@@ -64,7 +64,7 @@ public abstract class BaseMvpAppCompatDialogFragment  <U extends UiElement<P>, P
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (getActivity().isFinishing()) {
+        if (isRemoving()) {
             mMvpDelegation.destroy();
         }
     }
