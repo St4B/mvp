@@ -1,12 +1,12 @@
 /**
  * Copyright 2017 Quadible Ltd.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -64,13 +63,13 @@ import java.util.UUID;
  */
 public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
-    private static final String BUNDLE_KEY_PRESENTER_UUID  = "presenterUuid";
+    private static final String BUNDLE_KEY_PRESENTER_UUID = "presenterUuid";
 
     private ParcelUuid mParcelUuid;
 
     private IPresenterProvider mPresenterProvider = PresenterProvider.newInstance();
 
-    public static Set<String> sMvpImplementations = new HashSet<>();
+    private static Set<String> sMvpImplementations = new HashSet<>();
 
     public static void install(Application application) {
         ActionsCacheProvider.init(application);
@@ -85,6 +84,11 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      * @param ui The UI element that we want to use mvp pattern
      */
     public void setUp(U ui) {
+        //Perform clean up in order to remove trashes. They may be occurred from app crashes.
+        if (sMvpImplementations.size() == 0) {
+            mPresenterProvider.clear();
+        }
+
         UUID uuid = UUID.randomUUID();
         mParcelUuid = new ParcelUuid(uuid);
         P presenter = ui.createPresenter();
@@ -98,6 +102,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         mPresenterProvider.add(uuid, presenter);
         ui.setPresenter(presenter);
         ui.onPresenterCreated();
+
         sMvpImplementations.add(mParcelUuid.toString());
     }
 
@@ -166,11 +171,6 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         UUID uuid = mParcelUuid.getUuid();
         mPresenterProvider.remove(uuid);
         sMvpImplementations.remove(mParcelUuid);
-
-        //Perform clean up in order to remove trashes. They may be occurred from app crashes.
-        if (sMvpImplementations.size() == 0) {
-            mPresenterProvider.clear();
-        }
     }
 
 }

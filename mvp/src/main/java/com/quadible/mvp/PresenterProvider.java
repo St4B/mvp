@@ -136,10 +136,7 @@ class PresenterProvider implements IPresenterProvider{
      */
     @Override
     public void clear() {
-        ArrayList<UUID> uuids = mCache.getCachedKeys();
-        for (UUID uuid : uuids) {
-            remove(uuid);
-        }
+        mCache.clear();
     }
 
 }

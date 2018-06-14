@@ -62,4 +62,8 @@ interface ICache {
      */
     void remove(UUID uuid);
 
+    /**
+     * Clear the cache
+     */
+    void clear();
 }

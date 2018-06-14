@@ -165,4 +165,13 @@ class PreferencesCache implements ICache {
         ActionsCacheProvider.newInstance().provide(uuid).delete();
     }
 
+    /**
+     * Clear the cache
+     */
+    @Override
+    public void clear() {
+        mPresentersPreferences.edit().clear().apply();
+        mTypesPreferences.edit().clear().apply();
+    }
+
 }
