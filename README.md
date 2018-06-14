@@ -75,6 +75,6 @@ Download
 
 ```groovy
 dependencies {
-  implementation 'com.quadible:mvp:0.20-beta'
+  implementation 'com.quadible:mvp:0.21-beta'
 }
 ```
