@@ -76,6 +76,10 @@ Download
 ```groovy
 dependencies {
   implementation 'com.quadible:mvp:0.21-beta'
+
+  //You also need to include appcompat and Gson
+  implementation 'com.android.support:appcompat-v7:+'
+  implementation 'com.google.code.gson:gson:2.+'
 }
 ```
 
