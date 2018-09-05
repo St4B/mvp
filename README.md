@@ -68,7 +68,17 @@ It is not consistent to execute actions in presenter's contructor. Instead use o
 
 Also the presenter tries to execute pending ui actions on app's restore (In the scenario that was killed by the OS). You can enhance this behaviour by overriding onRestore() method of your Presenter.
 
-If you want a field to not be serialized you must define it as transient. For example you do not need to keep objects which contain business logic. These object could recreated in onRestore method. Presenter should only serialize data (ids,models,states etc)
+If you want a field to be persisted even if your app was killed by the OS, you must use ``` @Persistent``` and ```@Persistable``` annotations. Specifically you must add ```@Persistable``` to your presenter and ``` @Persistent``` to the field(s). For example:
+
+```java
+@Persistable
+public class TimerPresenter extends Presenter<TimerElement> {
+
+    @Persistent
+    private int mSeconds = 0;
+    
+}
+```
 
 Download
 --------
