@@ -15,7 +15,6 @@ import com.quadible.mymvp.uiElement.TimerElement;
  *     {@link com.quadible.mymvp.ui.TimerFragment}.
  * </p>
  */
-@Persistable
 public class TimerPresenter extends Presenter<TimerElement> {
 
     @Persistent

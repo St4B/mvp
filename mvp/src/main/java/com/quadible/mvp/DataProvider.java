@@ -69,9 +69,7 @@ class DataProvider implements IDataProvider {
     public void store(UUID uuid, Presenter presenter) {
         try {
             DataContainer data = extractValues(presenter);
-            if (data != null) { //The presenter is not {@link Persistable}
-                mDataCache.put(uuid, data);
-            }
+            mDataCache.put(uuid, data);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -89,15 +87,12 @@ class DataProvider implements IDataProvider {
     @Override
     public <T extends DataContainer> void restore(UUID uuid, Presenter presenter) {
         Class<T> cls = getDataContainerType(presenter);
-        if (cls != null) { //The presenter is {@link Persistable}
-            DataContainer data = mDataCache.get(uuid, cls);
-            try {
-                applyValues(data, presenter);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        DataContainer data = mDataCache.get(uuid, cls);
+        try {
+            applyValues(data, presenter);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-
     }
 
     /**
@@ -129,10 +124,6 @@ class DataProvider implements IDataProvider {
             throws IllegalAccessException {
         Class<T> cls = getDataContainerType(presenter);
         DataContainer data = getDataContainer(cls);
-
-        if (data == null) { //The presenter is not {@link Persistable}
-            return null;
-        }
 
         Field[] extractedFields = data.getClass().getDeclaredFields();
 

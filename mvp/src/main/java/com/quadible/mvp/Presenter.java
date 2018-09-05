@@ -15,6 +15,8 @@
  */
 package com.quadible.mvp;
 
+import com.quadible.mvp.annotation.Persistable;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -25,6 +27,7 @@ import java.util.UUID;
  *     becomes visible again.
  * </p>
  */
+@Persistable
 public abstract class Presenter<U extends UiElement> {
 
     private UUID mUuid;
