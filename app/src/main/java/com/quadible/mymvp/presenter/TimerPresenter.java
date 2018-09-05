@@ -3,6 +3,8 @@ package com.quadible.mymvp.presenter;
 import android.os.AsyncTask;
 
 import com.quadible.mvp.Presenter;
+import com.quadible.mvp.annotation.Persistable;
+import com.quadible.mvp.annotation.Persistent;
 import com.quadible.mymvp.uiElement.TimerElement;
 
 /**
@@ -13,8 +15,10 @@ import com.quadible.mymvp.uiElement.TimerElement;
  *     {@link com.quadible.mymvp.ui.TimerFragment}.
  * </p>
  */
+@Persistable
 public class TimerPresenter extends Presenter<TimerElement> {
 
+    @Persistent
     private int mSeconds = 0;
 
     private static final int SLEEP_SECONDS = 1000;

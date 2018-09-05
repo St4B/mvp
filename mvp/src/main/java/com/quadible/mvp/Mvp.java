@@ -19,6 +19,7 @@ import android.app.Application;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -73,8 +74,7 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
 
     public static void install(Application application) {
         ActionsCacheProvider.init(application);
-        PresenterProvider.init(application);
-        PresenterProvider.newInstance().restoreIfNeeded();
+        DataProvider.init(application);
     }
 
     /**
@@ -83,10 +83,19 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
      * visibility change.
      * @param ui The UI element that we want to use mvp pattern
      */
-    public void setUp(U ui) {
+    public void setUp(U ui, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            init(ui);
+        } else {
+            restore(ui, savedInstanceState);
+        }
+    }
+
+    private void init(U ui) {
         //Perform clean up in order to remove trashes. They may be occurred from app crashes.
         if (sMvpImplementations.size() == 0) {
-            mPresenterProvider.clear();
+            DataProvider.newInstance().clear();
+            ActionsCacheProvider.newInstance().clear();
         }
 
         UUID uuid = UUID.randomUUID();
@@ -104,6 +113,30 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         ui.onPresenterCreated();
 
         sMvpImplementations.add(mParcelUuid.toString());
+    }
+
+    private void restore(U ui, @Nullable Bundle savedInstanceState) {
+        mParcelUuid = savedInstanceState.getParcelable(BUNDLE_KEY_PRESENTER_UUID);
+        P presenter = mPresenterProvider.get(mParcelUuid.getUuid());
+
+        if (presenter == null) {
+            presenter = ui.createPresenter();
+
+            if (presenter == null) {
+                throw new IllegalArgumentException("createPresenter() of "
+                        + ui.getClass().getName() + " should not return null!");
+            }
+
+            UUID uuid = mParcelUuid.getUuid();
+            presenter.setUuid(uuid);
+            mPresenterProvider.add(uuid, presenter);
+            ui.setPresenter(presenter);
+            IDataProvider dataProvider = DataProvider.newInstance();
+            dataProvider.restore(uuid, presenter);
+            presenter.onRestore();
+
+            sMvpImplementations.add(mParcelUuid.toString());
+        }
     }
 
     /**
@@ -153,24 +186,15 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
     }
 
     /**
-     * Used in order to retrieve the {@link Presenter}'s UUID from the corresponding
-     * {@link UiElement} in order to retrieve its presenter based on this UUID from
-     * {@link PresenterProvider}.
-     * @param savedInstanceState From where to retrieve UUID.
-     */
-    void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        mParcelUuid = savedInstanceState.getParcelable(BUNDLE_KEY_PRESENTER_UUID);
-        sMvpImplementations.add(mParcelUuid.toString());
-    }
-
-    /**
      * Remove {@link Presenter} from {@link PresenterProvider}. The {@link UiElement} is removed and
      * as a result the presenter is not needed any more.
      */
     void destroy() {
         UUID uuid = mParcelUuid.getUuid();
         mPresenterProvider.remove(uuid);
-        sMvpImplementations.remove(mParcelUuid);
+        IDataProvider dataProvider = DataProvider.newInstance();
+        dataProvider.remove(uuid);
+        sMvpImplementations.remove(mParcelUuid.toString());
     }
 
 }

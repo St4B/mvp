@@ -31,13 +31,13 @@ public abstract class Presenter<U extends UiElement> {
 
     //We are going to cache them manually, because it is possible to have different classes.
     //So we need to keep reference to the class name also.
-    private transient ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
+    private ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
 
-    private transient boolean isAttached = false;
+    private boolean isAttached = false;
 
-    private transient boolean isRemoved = false;
+    private boolean isRemoved = false;
 
-    private transient U mUi;
+    private U mUi;
 
     /**
      * Presenter was restored. Probably the application was killed by the OS. Take an action if
@@ -80,8 +80,8 @@ public abstract class Presenter<U extends UiElement> {
         mUi = null;
 
         //Save the last "visible" instance of presenter
-        ICache cache = PreferencesCache.newInstance();
-        cache.add(mUuid, this);
+        IDataProvider dataProvider = DataProvider.newInstance();
+        dataProvider.store(mUuid, this);
     }
 
     void setRemoved() {
@@ -105,8 +105,8 @@ public abstract class Presenter<U extends UiElement> {
 
             //Something changed while the presenter is detached.
             //Keep the new state of the presenter in cache.
-            ICache cache = PreferencesCache.newInstance();
-            cache.add(mUuid, this);
+            IDataProvider dataProvider = DataProvider.newInstance();
+            dataProvider.store(mUuid, this);
 
             IActionsCache<UiAction<U>> actionsCache =
                     ActionsCacheProvider.newInstance().provide(mUuid);

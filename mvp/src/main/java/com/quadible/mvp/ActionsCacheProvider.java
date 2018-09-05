@@ -16,19 +16,27 @@
 package com.quadible.mvp;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.quadible.mvp.Presenter.UiAction;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * <p>
  *     This class is responsible for providing the corresponding {@link IActionsCache}
  *     implementation of each {@link Presenter}. Each {@link Presenter} has its own
- *     {@link IActionsCache}.
+ *     {@link IActionsCache}. Also, this class keeps track of provided {@link IActionsCache} in
+ *     order to be able to perform clean up at initialization.
  * </p>
  */
 class ActionsCacheProvider {
+
+    private static final String PREFERENCE_ACTIONS_INDEX_SUFFIX = ".mvpActionsIndex";
+
+    private final SharedPreferences mActionsIndexPreferences;
 
     private final Application mApplication;
 
@@ -36,6 +44,8 @@ class ActionsCacheProvider {
 
     private ActionsCacheProvider(Application application) {
         mApplication = application;
+        String prefsName = application.getPackageName() + PREFERENCE_ACTIONS_INDEX_SUFFIX;
+        mActionsIndexPreferences = application.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
     }
 
     static ActionsCacheProvider newInstance() {
@@ -60,8 +70,28 @@ class ActionsCacheProvider {
         if (uuid == null) {
             return new NullActionsCache<>();
         } else {
+            String uuidString = uuid.toString();
+            mActionsIndexPreferences.edit()
+                    .putString(uuidString, uuidString)
+                    .apply();
             return new ActionsCache<>(mApplication, uuid);
         }
+    }
+
+    /**
+     * Clears cached actions for every presenter that was stored. (Used for clean up)
+     */
+    void clear() {
+        Set<String> caches = mActionsIndexPreferences.getAll().keySet();
+
+        for (String key : caches) {
+            UUID uuid = UUID.fromString(key);
+            provide(uuid).delete();
+            mActionsIndexPreferences.edit()
+                    .remove(key)
+                    .apply();
+        }
+
     }
 
 }

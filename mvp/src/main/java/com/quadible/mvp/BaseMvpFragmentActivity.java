@@ -35,7 +35,7 @@ public abstract class BaseMvpFragmentActivity<U extends UiElement<P>, P extends 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMvpDelegation = new Mvp<>();
-        if (savedInstanceState == null) mMvpDelegation.setUp((U)this);
+        mMvpDelegation.setUp((U)this, savedInstanceState);
     }
 
     @Override
@@ -55,12 +55,6 @@ public abstract class BaseMvpFragmentActivity<U extends UiElement<P>, P extends 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMvpDelegation.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mMvpDelegation.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

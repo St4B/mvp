@@ -49,11 +49,4 @@ interface IPresenterProvider {
      */
     void remove(UUID uuid);
 
-    /**
-     * Clear all the presenters. Namely the presenters that were created in our current session as
-     * well as the presenters that were stored in previous sessions and never been restored (possible
-     * after crash).
-     */
-    void clear();
-
 }
