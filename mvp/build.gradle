@@ -59,7 +59,7 @@ dependencies {
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     compileOnly 'com.google.code.gson:gson:2.+'
 
-    implementation project(':mvp-annotation')
+    api project(':mvp-annotation')
 
     testImplementation 'junit:junit:4.12'
 }
