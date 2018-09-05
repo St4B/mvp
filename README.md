@@ -68,10 +68,9 @@ It is not consistent to execute actions in presenter's contructor. Instead use o
 
 Also the presenter tries to execute pending ui actions on app's restore (In the scenario that was killed by the OS). You can enhance this behaviour by overriding onRestore() method of your Presenter.
 
-If you want a field to be persisted even if your app was killed by the OS, you must use ``` @Persistent``` and ```@Persistable``` annotations. Specifically you must add ```@Persistable``` to your presenter and ``` @Persistent``` to the field(s). For example:
+If you want a field to be persisted even if your app was killed by the OS, you must use ``` @Persistent``` annotation. For example:
 
 ```java
-@Persistable
 public class TimerPresenter extends Presenter<TimerElement> {
 
     @Persistent
