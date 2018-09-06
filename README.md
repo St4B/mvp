@@ -84,7 +84,8 @@ Download
 
 ```groovy
 dependencies {
-  implementation 'com.quadible:mvp:0.21-beta'
+  implementation 'com.quadible:mvp:1.0'
+  annotationProcessor 'com.quadible:mvp-processor:1.1'
 
   //You also need to include appcompat and Gson
   implementation 'com.android.support:appcompat-v7:+'
