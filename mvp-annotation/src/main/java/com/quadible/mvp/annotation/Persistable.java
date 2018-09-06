@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * Generate a class for the annotated object in order to store in the generated class the
- * {@Persistent} fields of the annotated object.
+ * {@link Persistent} fields of the annotated object.
  */
 @Inherited
 @Retention(RetentionPolicy.CLASS)
