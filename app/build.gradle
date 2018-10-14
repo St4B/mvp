@@ -35,6 +35,8 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     annotationProcessor project(path: ':mvp-processor')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.2-eap13'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.30.2-eap13'
 
 }
 repositories {
