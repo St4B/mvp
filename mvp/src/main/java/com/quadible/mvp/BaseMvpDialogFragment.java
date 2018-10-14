@@ -17,7 +17,8 @@ package com.quadible.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+
+import com.quadible.mvp.coroutines.ScopedDialogFragment;
 
 /**
  * <p>
@@ -25,7 +26,7 @@ import android.support.v4.app.DialogFragment;
  * </p>
  */
 public abstract class BaseMvpDialogFragment <U extends UiElement<P>, P extends Presenter<U>>
-        extends DialogFragment implements UiElement<P> {
+        extends ScopedDialogFragment implements UiElement<P> {
 
     private Mvp<U, P> mMvpDelegation = new Mvp<>();
 

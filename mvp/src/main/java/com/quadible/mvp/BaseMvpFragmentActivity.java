@@ -17,7 +17,8 @@ package com.quadible.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+
+import com.quadible.mvp.coroutines.ScopedFragmentActivity;
 
 /**
  * <p>
@@ -25,7 +26,7 @@ import android.support.v4.app.FragmentActivity;
  * </p>
  */
 public abstract class BaseMvpFragmentActivity<U extends UiElement<P>, P extends Presenter<U>>
-        extends FragmentActivity implements UiElement<P>{
+        extends ScopedFragmentActivity implements UiElement<P>{
 
     private Mvp<U, P> mMvpDelegation;
 

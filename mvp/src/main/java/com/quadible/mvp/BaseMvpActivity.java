@@ -17,7 +17,8 @@ package com.quadible.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
+import com.quadible.mvp.coroutines.ScopedActivity;
 
 /**
  * <p>
@@ -25,7 +26,7 @@ import android.support.v7.app.AppCompatActivity;
  * </p>
  */
 public abstract class BaseMvpActivity<U extends UiElement<P>, P extends Presenter<U>>
-        extends AppCompatActivity implements UiElement<P>{
+        extends ScopedActivity implements UiElement<P>{
 
     private Mvp<U, P> mMvpDelegation;
 
