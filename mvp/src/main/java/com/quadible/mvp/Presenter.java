@@ -34,7 +34,7 @@ public abstract class Presenter<U extends UiElement> {
 
     //We are going to cache them manually, because it is possible to have different classes.
     //So we need to keep reference to the class name also.
-    private ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
+    private ArrayList<UiAction> mPendingActions = new ArrayList<>();
 
     private boolean isAttached = false;
 
@@ -47,7 +47,7 @@ public abstract class Presenter<U extends UiElement> {
      * needed by implementing this method.
      */
     protected void onRestore() {
-        IActionsCache<UiAction<U>> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
+        IActionsCache<UiAction> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
         mPendingActions = actionsCache.restoreActions();
     }
 
@@ -65,13 +65,12 @@ public abstract class Presenter<U extends UiElement> {
      * Set the ui element to the pending UI actions and execute them.
      */
     private void executePendingUiActions() {
-        for (UiAction<U> action : mPendingActions) {
-            action.setUi(mUi);
+        for (UiAction action : mPendingActions) {
             action.act();
         }
 
         mPendingActions.clear();
-        IActionsCache<UiAction<U>> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
+        IActionsCache<UiAction> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
         actionsCache.delete();
     }
 
@@ -97,9 +96,8 @@ public abstract class Presenter<U extends UiElement> {
      * again.
      * @param action The actions to execute.
      */
-    protected void post(UiAction<U> action) {
+    protected void post(UiAction action) {
         if (isAttached) {
-            action.setUi(mUi);
             action.act();
         } else if (!isRemoved){
             //if presenter is going to be removed we do not want to cache actions
@@ -111,7 +109,7 @@ public abstract class Presenter<U extends UiElement> {
             IDataProvider dataProvider = DataProvider.newInstance();
             dataProvider.store(mUuid, this);
 
-            IActionsCache<UiAction<U>> actionsCache =
+            IActionsCache<UiAction> actionsCache =
                     ActionsCacheProvider.newInstance().provide(mUuid);
             actionsCache.saveActions(mPendingActions);
         }
@@ -122,38 +120,28 @@ public abstract class Presenter<U extends UiElement> {
     }
 
     /**
-     * <p>
-     *     Helper class in order to cache UI actions while the presenter is detached.
-     * </p>
-     * @param <U> The type of UI element to which we want to act.
+     * Define an action (or a set of actions) that we want to perform to the UI Element when it is
+     * available.
      */
-    public abstract class UiAction<U extends UiElement> {
-
-        private U mUi;
+    public interface UiAction {
 
         /**
-         * Define the UI actions that we want to execute. In order to get the UI element you must
+         * Perform the UI actions that we want to execute. In order to get the UI element you must
          * call {@link #getUi()}.
          */
-        public abstract void act();
+        void act();
 
-        /**
-         * Get the UI element to which we want to act. The ui element is loaded when the presenter
-         * is being attached.
-         * @return The ui element
-         */
-        public final U getUi() {
-            return mUi;
-        }
+    }
 
-        /**
-         * Used in order to set the UI element to which want to act. It should be called internally
-         * only while the presenter is being attached.
-         */
-        private void setUi(U ui) {
-            mUi = ui;
-        }
 
+    /**
+     * Get the UI element to which we want to act. The UI element is loaded when the presenter
+     * is being attached. Use this method only {@link UiAction}.
+     *
+     * @return The ui element
+     */
+    protected final U getUi() {
+        return mUi;
     }
 
 }

@@ -24,8 +24,8 @@ import com.quadible.mymvp.uiElement.MainElement;
  * <p>
  *     The {@link Presenter} of {@link com.quadible.mymvp.ui.MainActivity}. Whenever the
  *     {@link MainPresenter#setNewText()} is called the presenter waits for a while and then
- *     uses {@link UiUpdater} to change text of its corresponding UiElement a.k.a
- *     {@link com.quadible.mymvp.ui.MainActivity}.
+ *     uses {@link com.quadible.mvp.Presenter.UiAction} to change text of its corresponding
+ *     UiElement a.k.a {@link com.quadible.mymvp.ui.MainActivity}.
  * </p>
  */
 public class MainPresenter extends Presenter<MainElement> {
@@ -55,17 +55,10 @@ public class MainPresenter extends Presenter<MainElement> {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            post(new UiUpdater());
+            post(mUpdateText);
         }
     }
 
-    private class UiUpdater extends UiAction<MainElement> {
-
-        @Override
-        public void act() {
-            final String text = "TSIKABOOM!";
-            getUi().updateText(text);
-        }
-    }
+    private final UiAction mUpdateText = () -> getUi().updateText("TSIKABOOM!");
 
 }

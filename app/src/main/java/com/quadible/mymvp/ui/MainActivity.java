@@ -18,7 +18,6 @@ package com.quadible.mymvp.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.widget.Button;
 
 import com.quadible.mvp.BaseMvpActivity;
@@ -42,12 +41,7 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.btnUpdateLabel);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.setNewText();
-            }
-        });
+        mButton.setOnClickListener(v -> mPresenter.setNewText());
         addFragment();
     }
 
