@@ -27,11 +27,11 @@ ext {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -64,7 +64,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly 'com.android.support:appcompat-v7:27.1.1'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
     compileOnly 'com.google.code.gson:gson:2.8.5'
 
     api project(':mvp-annotation')
@@ -74,6 +74,8 @@ dependencies {
         exclude group: 'xmlpull'
         exclude group: 'org.apache.maven'
     }
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     testAnnotationProcessor project(path: ':mvp-processor')
 }
