@@ -34,5 +34,5 @@ before_install:
   - chmod +x gradlew
 
 script:
-#  ./gradlew clean build
-  ./gradlew connectedCheck
+  ./gradlew clean build --stacktrace
+#  ./gradlew connectedCheck
