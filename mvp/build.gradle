@@ -38,8 +38,16 @@ android {
         consumerProguardFiles 'proguard-rules.pro'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -55,16 +63,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
 
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
-    compileOnly 'com.google.code.gson:gson:2.+'
+    compileOnly 'com.google.code.gson:gson:2.8.5'
 
     api project(':mvp-annotation')
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation ("org.robolectric:robolectric:3.8") {
+        exclude group: 'xmlpull'
+        exclude group: 'org.apache.maven'
+    }
+
+    testAnnotationProcessor project(path: ':mvp-processor')
 }
 
 //Apply at the end!
