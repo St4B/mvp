@@ -25,11 +25,11 @@ licenses:
     - 'google-gdk-license-.+'
     - 'android-sdk-preview-license-.+'
 
-cache:
-  directories:
-    - "$HOME/.gradle/caches/"
-    - "$HOME/.gradle/wrapper/"
-    - "$HOME/.android/build-cache"
+#cache:
+#  directories:
+#    - "$HOME/.gradle/caches/"
+#    - "$HOME/.gradle/wrapper/"
+#    - "$HOME/.android/build-cache"
 
 before_install:
   - chmod +x gradlew
