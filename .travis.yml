@@ -38,5 +38,5 @@ before_install:
 - yes | sdkmanager "platforms;android-28"
 
 script:
-  ./gradlew  clean build
+  ./gradlew clean build
 #   | ./gradlew connectedCheck
