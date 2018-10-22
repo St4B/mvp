@@ -33,6 +33,9 @@ cache:
 before_install:
   - chmod +x gradlew
 
+before_install:
+- yes | sdkmanager "platforms;android-28"
+
 script:
   ./gradlew clean build --stacktrace
 #  ./gradlew connectedCheck
