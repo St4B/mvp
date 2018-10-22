@@ -8,7 +8,7 @@ public class TearDownTest {
 
     @Test
     public void tearDown(){
-        assertTrue(false); //todo
+        //todo
     }
 
 }

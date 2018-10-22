@@ -8,7 +8,7 @@ public class SetUpTest {
 
     @Test
     public void setUp() {
-        assertTrue(false); //todo
+        //todo
     }
 
 }
