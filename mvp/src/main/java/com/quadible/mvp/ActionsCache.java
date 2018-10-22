@@ -18,6 +18,7 @@ package com.quadible.mvp;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.quadible.mvp.Presenter.UiAction;
@@ -91,6 +92,11 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
     @Override
     public ArrayList<A> restoreActions() {
         String typesInString = mActionsPreferences.getString(KEY_ACTIONS_TYPES, "");
+
+        if (TextUtils.isEmpty(typesInString)) {
+            return new ArrayList<>();
+        }
+
         String[] types = typesInString.split(ACTIONS_SEPARATOR);
         Gson gson = new Gson();
         ArrayList<A> actions = new ArrayList<>();
