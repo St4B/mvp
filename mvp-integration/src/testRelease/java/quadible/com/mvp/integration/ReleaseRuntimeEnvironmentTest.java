@@ -7,6 +7,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.junit.Assert.fail;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.O_MR1) //fixme remove whenever robolectric supports api 28
 public class ReleaseRuntimeEnvironmentTest {
 
     @Test
