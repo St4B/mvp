@@ -1,5 +1,6 @@
 package quadible.com.mvp.integration;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import com.quadible.mvp.Mvp;
@@ -13,6 +14,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.annotation.Config;
 
 import quadible.com.mvp.integration.mocks.ActivityMock;
 import quadible.com.mvp.integration.mocks.PresenterMock;
@@ -21,6 +23,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.O_MR1) //fixme remove whenever robolectric supports api 28
 public class ActivityTest {
 
     @Before
