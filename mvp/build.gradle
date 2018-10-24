@@ -37,7 +37,7 @@ android {
 
         consumerProguardFiles 'proguard-rules.pro'
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.quadible.mvp.MvpTestRunner"
     }
 
 
@@ -68,14 +68,13 @@ dependencies {
     compileOnly 'com.google.code.gson:gson:2.8.5'
 
     api project(':mvp-annotation')
+    
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.google.code.gson:gson:2.8.5'
+    androidTestImplementation 'com.android.support:appcompat-v7:27.1.1'
 
-    testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    testImplementation ("org.robolectric:robolectric:3.8") {
-        exclude group: 'xmlpull'
-        exclude group: 'org.apache.maven'
-    }
-
-    testAnnotationProcessor project(path: ':mvp-processor')
+    androidTestAnnotationProcessor project(path: ':mvp-processor')
 }
 
 //Apply at the end!

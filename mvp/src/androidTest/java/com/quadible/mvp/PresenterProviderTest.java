@@ -1,17 +1,14 @@
 package com.quadible.mvp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import com.quadible.mvp.mocks.PresenterMock;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.UUID;
 
-@RunWith(RobolectricTestRunner.class)
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
+
 public class PresenterProviderTest {
 
     private final PresenterProvider mPresenterProvider = PresenterProvider.newInstance();

@@ -1,18 +1,15 @@
 package com.quadible.mvp;
 
-import static org.junit.Assert.assertEquals;
-
+import com.quadible.mvp.mocks.ApplicationMock;
 import com.quadible.mvp.mocks.DataContainerMock;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.UUID;
 
-@RunWith(RobolectricTestRunner.class)
+import static org.junit.Assert.assertEquals;
+
 public class DataCacheTest {
 
     private DataCache mDataCache;
@@ -25,7 +22,7 @@ public class DataCacheTest {
 
     @Before
     public void setUp() {
-        mDataCache = new DataCache(RuntimeEnvironment.application);
+        mDataCache = new DataCache(ApplicationMock.getApplication());
     }
 
     @Test

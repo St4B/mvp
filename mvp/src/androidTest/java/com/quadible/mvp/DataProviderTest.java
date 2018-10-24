@@ -1,18 +1,15 @@
 package com.quadible.mvp;
 
-import static org.junit.Assert.*;
-
+import com.quadible.mvp.mocks.ApplicationMock;
 import com.quadible.mvp.mocks.PresenterMock;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.UUID;
 
-@RunWith(RobolectricTestRunner.class)
+import static org.junit.Assert.assertEquals;
+
 public class DataProviderTest {
 
     private IDataProvider mDataProvider;
@@ -25,7 +22,7 @@ public class DataProviderTest {
 
     @Before
     public void setUp() {
-        DataProvider.init(RuntimeEnvironment.application);
+        DataProvider.init(ApplicationMock.getApplication());
         mDataProvider = DataProvider.newInstance();
     }
 
