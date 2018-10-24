@@ -26,6 +26,8 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
+def buildType = "whatever"
+
 android {
     compileSdkVersion 27
 
@@ -42,15 +44,19 @@ android {
 
     buildTypes {
         release {
+            buildType = "release"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
+
     }
 
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
 }
 
 dependencies {
@@ -67,10 +73,12 @@ dependencies {
     androidTestImplementation 'com.android.support:appcompat-v7:27.1.1'
 
     androidTestAnnotationProcessor project(path: ':mvp-processor')
+
 }
 
-//Apply at the end!
-if (project.rootProject.file('local.properties').exists()) {
+//Apply at the end
+if (project.rootProject.file('local.properties').exists() //we do not need the following tasks in CI environment
+        && buildType == "release") { //In release mode we exclude test classes
     apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
     apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 }
