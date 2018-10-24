@@ -40,14 +40,6 @@ android {
         testInstrumentationRunner "com.quadible.mvp.MvpTestRunner"
     }
 
-
-    testOptions {
-        unitTests {
-            returnDefaultValues = true
-            includeAndroidResources = true
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
