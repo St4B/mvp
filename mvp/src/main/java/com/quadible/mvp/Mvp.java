@@ -197,4 +197,17 @@ public class Mvp<U extends UiElement<P>, P extends Presenter<U>> {
         sMvpImplementations.remove(mParcelUuid.toString());
     }
 
+    static void clearRuntimeData() {
+        if (sMvpImplementations == null) {
+            return;
+        }
+
+        for (String uuidString : sMvpImplementations) {
+            UUID uuid = UUID.fromString(uuidString);
+            PresenterProvider.newInstance().remove(uuid);
+        }
+
+        sMvpImplementations.clear();
+    }
+
 }
