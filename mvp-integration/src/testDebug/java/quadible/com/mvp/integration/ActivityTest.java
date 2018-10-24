@@ -1,13 +1,11 @@
 package quadible.com.mvp.integration;
 
 import android.os.Bundle;
-import android.os.ParcelUuid;
 
-import com.quadible.mvp.mocks.ActivityMock;
-import com.quadible.mvp.mocks.PresenterMock;
+import com.quadible.mvp.Mvp;
+import com.quadible.mvp.MvpRuntimeEnvironment;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,14 +14,18 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 
+import quadible.com.mvp.integration.mocks.ActivityMock;
+import quadible.com.mvp.integration.mocks.PresenterMock;
+
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
 public class ActivityTest {
 
     @Before
     public void setUp() {
-        RuntimeEnvironment.application.setTheme(R.style.Theme_AppCompat);
+        RuntimeEnvironment.application.setTheme(R.style.AppTheme);
         Mvp.install(RuntimeEnvironment.application);
     }
 
@@ -34,7 +36,7 @@ public class ActivityTest {
                 .visible();
 
         ActivityMock activityMock = controller.get();
-        Assert.assertNotNull(activityMock.mPresenter);
+        Assert.assertNotNull(activityMock.getPresenter());
     }
 
 
@@ -44,12 +46,12 @@ public class ActivityTest {
         controller.create()
                 .visible();
 
-        PresenterMock presenterBefore = controller.get().mPresenter;
+        PresenterMock presenterBefore = controller.get().getPresenter();
 
         PresenterMock presenterAfter = controller.pause()
                 .resume()
                 .get()
-                .mPresenter;
+                .getPresenter();
 
         //same reference! Presenters are not recreated during configuration changes
         //They are just detached and attached to to the corresponding ui element.
@@ -62,23 +64,22 @@ public class ActivityTest {
         controller.create()
                 .visible();
 
-        PresenterMock presenterBefore = controller.get().mPresenter;
+        PresenterMock presenterBefore = controller.get().getPresenter();
         presenterBefore.setInt(111);
 
         Bundle bundle = new Bundle();
-        controller.saveInstanceState(bundle) //take the bundle
-                .pause(); //trigger presenter's store process
+        controller.saveInstanceState(bundle);
+        controller.pause(); //In order to store presenter
 
-        //Remove presenter from presenter provider.
-        //On kill, presenter provider would not contain any presenter
-        ParcelUuid parcelUuid = bundle.getParcelable("presenterUuid");
-        PresenterProvider.newInstance().remove(parcelUuid.getUuid());
+        MvpRuntimeEnvironment.cleanUp();
 
-        ActivityMock recreatedActivity = Robolectric.buildActivity(ActivityMock.class)
+        PresenterMock presenterAfter = Robolectric.buildActivity(ActivityMock.class)
                 .create(bundle)
-                .get();
+                .visible()
+                .get()
+                .getPresenter();
 
-        assertEquals(presenterBefore, recreatedActivity.mPresenter);
+        assertEquals(presenterBefore, presenterAfter);
     }
 
 }
