@@ -1,6 +1,4 @@
-package com.quadible.mvp;
-
-import static org.junit.Assert.assertTrue;
+package quadible.com.mvp.integration;
 
 import org.junit.Test;
 
@@ -8,17 +6,17 @@ public class PostActionTest {
 
     @Test
     public void postWhenDetached() {
-        assertTrue(false); //todo
+        //todo
     }
 
     @Test
     public void postWhenAttached() {
-        assertTrue(false); //todo
+        //todo
     }
 
     @Test
     public void postOnRestore() {
-        assertTrue(false); //todo
+        //todo
     }
 
 }

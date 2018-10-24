@@ -1,4 +1,4 @@
-package com.quadible.mvp.mocks;
+package quadible.com.mvp.integration.mocks;
 
 import com.quadible.mvp.BaseMvpActivity;
 

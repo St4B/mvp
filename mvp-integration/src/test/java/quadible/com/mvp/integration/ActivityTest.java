@@ -1,14 +1,12 @@
-package com.quadible.mvp;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertNotNull;
+package quadible.com.mvp.integration;
 
 import android.os.Bundle;
 import android.os.ParcelUuid;
 
 import com.quadible.mvp.mocks.ActivityMock;
 import com.quadible.mvp.mocks.PresenterMock;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +15,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
+
+import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class ActivityTest {
@@ -34,7 +34,7 @@ public class ActivityTest {
                 .visible();
 
         ActivityMock activityMock = controller.get();
-        assertNotNull(activityMock.mPresenter);
+        Assert.assertNotNull(activityMock.mPresenter);
     }
 
 
