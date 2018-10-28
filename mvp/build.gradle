@@ -76,8 +76,7 @@ dependencies {
 }
 
 //Apply at the end
-if (project.rootProject.file('local.properties').exists() //we do not need the following tasks in CI environment
-        && buildType == "release") { //In release mode we exclude test classes
+if (project.rootProject.file('local.properties').exists()) {  //we do not need the following tasks in CI environment
     apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
     apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 }
