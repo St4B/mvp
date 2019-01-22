@@ -1,6 +1,6 @@
 package com.quadible.mvp;
 
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 
 @VisibleForTesting
 public class MvpRuntimeEnvironment {

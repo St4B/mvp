@@ -62,15 +62,15 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly 'androidx.appcompat:appcompat:1.0.0'
     compileOnly 'com.google.code.gson:gson:2.8.5'
 
     api project(':mvp-annotation')
     
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.google.code.gson:gson:2.8.5'
-    androidTestImplementation 'com.android.support:appcompat-v7:28.0.0'
+    androidTestImplementation 'androidx.appcompat:appcompat:1.0.0'
 
     androidTestAnnotationProcessor project(path: ':mvp-processor')
 }

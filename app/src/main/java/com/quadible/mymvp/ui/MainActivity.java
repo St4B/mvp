@@ -16,10 +16,11 @@
 package com.quadible.mymvp.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.quadible.mvp.BaseMvpActivity;
 import com.quadible.mymvp.R;

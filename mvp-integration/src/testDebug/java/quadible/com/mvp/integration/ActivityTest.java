@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = Build.VERSION_CODES.O_MR1) //fixme remove whenever robolectric supports api 28
+@Config(sdk = Build.VERSION_CODES.P) //fixme remove whenever robolectric supports api 28
 public class ActivityTest {
 
     @Before
