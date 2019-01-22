@@ -64,7 +64,7 @@ public class MainActivity
 }
 ```
 
-It is not consistent to execute actions in presenter's contructor. Instead use onPresenterCreated() method of your ui component to perform action on Presenter's initiation.
+It is not consistent to execute actions in presenter's constructor. Instead use onPresenterCreated() method of your ui component to perform action on Presenter's initiation.
 
 Also the presenter tries to execute pending ui actions on app's restore (In the scenario that was killed by the OS). You can enhance this behaviour by overriding onRestore() method of your Presenter.
 
