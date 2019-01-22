@@ -93,6 +93,20 @@ dependencies {
 }
 ```
 
+AndroidX Migration
+--------
+
+```groovy
+dependencies {
+  implementation 'com.quadible:mvp:2.0.0'
+  annotationProcessor 'com.quadible:mvp-processor:2.0.0'
+
+  //You also need to include appcompat and Gson
+  implementation 'androidx.appcompat:appcompat:1.0.0'
+  implementation 'com.google.code.gson:gson:2.+'
+}
+```
+
 ## License
 ```
  Copyright 2017 Quadible Ltd.
