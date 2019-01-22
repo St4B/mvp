@@ -1,4 +1,4 @@
-# mvp ![Build Status](https://travis-ci.com/St4B/mvp.svg?branch=master)
+# mvp ![Build Status](https://travis-ci.com/St4B/mvp.svg?branch=development)
 Android mvp simple implementation.
 
  * Avoid checking if presenter is attached or not.
