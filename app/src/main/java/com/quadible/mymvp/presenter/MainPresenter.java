@@ -18,6 +18,7 @@ package com.quadible.mymvp.presenter;
 import android.os.AsyncTask;
 
 import com.quadible.mvp.Presenter;
+import com.quadible.mvp.annotation.Persistent;
 import com.quadible.mymvp.uiElement.MainElement;
 
 /**
@@ -31,6 +32,9 @@ import com.quadible.mymvp.uiElement.MainElement;
 public class MainPresenter extends Presenter<MainElement> {
 
     private static final int SECONDS = 10000;
+
+    @Persistent
+    private String mError;
 
     public MainPresenter(){}
 
@@ -55,10 +59,12 @@ public class MainPresenter extends Presenter<MainElement> {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            post(mUpdateText);
+            mError = "TSIKABOOM!";
+            post((ui) -> {
+                ui.updateText(mError);
+                mError = "";
+            });
         }
     }
-
-    private final UiAction mUpdateText = () -> getUi().updateText("TSIKABOOM!");
 
 }

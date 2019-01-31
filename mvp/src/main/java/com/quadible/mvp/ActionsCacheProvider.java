@@ -66,7 +66,7 @@ class ActionsCacheProvider {
      * @param <A> Type of {@link Presenter}'s {@link UiAction}.
      * @return The cache!
      */
-    <A extends UiAction> IActionsCache<A> provide(UUID uuid) {
+    <U extends UiElement> IActionsCache<U> provide(UUID uuid) {
         if (uuid == null) {
             return new NullActionsCache<>();
         } else {

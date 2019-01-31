@@ -19,10 +19,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
 import com.quadible.mvp.Presenter.UiAction;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -39,13 +40,15 @@ import java.util.UUID;
  *     deserializing when we had a new pending action, if we saved the list at a whole.
  * </p>
  */
-class ActionsCache<A extends UiAction> implements IActionsCache<A> {
+class ActionsCache<U extends UiElement> implements IActionsCache<U> {
 
     private static final String PREFERENCE_ACTIONS_SUFFIX = ".mvpActions";
 
     private static final String KEY_ACTIONS_TYPES = "types";
 
     private static final String ACTIONS_SEPARATOR = ",";
+
+    private static final String ACTIONS_TYPES_EMPTY_VALUE = "eimaiToEmptyValue";
 
     private final SharedPreferences mActionsPreferences;
 
@@ -64,18 +67,15 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
      * @param actions Actions that we want to save.
      */
     @Override
-    public void saveActions(ArrayList<A> actions) {
+    public void saveActions(ArrayList<UiAction<U>> actions) {
         if (actions == null || actions.size() == 0) return;
 
         StringBuilder actionTypes = new StringBuilder();
-        Gson gson = new Gson();
 
         for (int i = 0, size = actions.size(); i < size; i++) {
             Presenter.UiAction action = actions.get(i);
             actionTypes.append(action.getClass().getName());
             actionTypes.append(ACTIONS_SEPARATOR);
-            String serializedAction = gson.toJson(action);
-            mActionsPreferences.edit().putString(Integer.toString(i), serializedAction).commit();
         }
 
         //Remove last separator
@@ -89,21 +89,38 @@ class ActionsCache<A extends UiAction> implements IActionsCache<A> {
      * @return The pending actions that were stored.
      */
     @Override
-    public ArrayList<A> restoreActions() {
-        String typesInString = mActionsPreferences.getString(KEY_ACTIONS_TYPES, "");
+    public ArrayList<UiAction<U>> restoreActions() {
+        String typesInString =
+                mActionsPreferences.getString(KEY_ACTIONS_TYPES, ACTIONS_TYPES_EMPTY_VALUE);
+
+        if (ACTIONS_TYPES_EMPTY_VALUE.equals(typesInString)) {
+            return new ArrayList<>();
+        }
+
         String[] types = typesInString.split(ACTIONS_SEPARATOR);
-        Gson gson = new Gson();
-        ArrayList<A> actions = new ArrayList<>();
+
+        ArrayList<UiAction<U>> actions = new ArrayList<>();
 
         for (int i = 0; i < types.length; i++) {
             String typeName = types[i];
-            String serializedAction = mActionsPreferences.getString(Integer.toString(i), "{}");
             Class<? extends Presenter.UiAction> cls;
             try {
-                cls = (Class<? extends A>) Class.forName(typeName);
-                A action = (A) gson.fromJson(serializedAction, cls);
+
+                cls = (Class<UiAction<U>>) Class.forName(typeName);
+                Constructor<?> constructor = cls.getDeclaredConstructors()[0];
+                boolean accessible = constructor.isAccessible();
+                constructor.setAccessible(true);
+                UiAction<U> action = (UiAction<U>) constructor.newInstance(
+                        new Object[constructor.getParameterTypes().length]);
+                constructor.setAccessible(accessible);
                 actions.add(action);
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
         }

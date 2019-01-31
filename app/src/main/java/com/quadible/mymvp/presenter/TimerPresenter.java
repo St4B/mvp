@@ -47,11 +47,9 @@ public class TimerPresenter extends Presenter<TimerElement> {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            post(mUpdateTime);
+            post((ui) -> ui.setTime(mSeconds));
             new Timer().execute();
         }
     }
-
-    private final UiAction mUpdateTime = () -> getUi().setTime(mSeconds);
 
 }

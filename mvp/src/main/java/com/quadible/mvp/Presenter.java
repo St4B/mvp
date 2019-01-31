@@ -15,8 +15,16 @@
  */
 package com.quadible.mvp;
 
+import android.os.Debug;
+
 import com.quadible.mvp.annotation.Persistable;
 
+import java.lang.invoke.CallSite;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -34,7 +42,7 @@ public abstract class Presenter<U extends UiElement> {
 
     //We are going to cache them manually, because it is possible to have different classes.
     //So we need to keep reference to the class name also.
-    private ArrayList<UiAction> mPendingActions = new ArrayList<>();
+    private ArrayList<UiAction<U>> mPendingActions = new ArrayList<>();
 
     private boolean isAttached = false;
 
@@ -42,13 +50,22 @@ public abstract class Presenter<U extends UiElement> {
 
     private U mUi;
 
+    private static final RestoreLambdaCallerFactory sRestoreLambdaCallerFactory =
+            new RestoreLambdaCallerFactory();
+
     /**
      * Presenter was restored. Probably the application was killed by the OS. Take an action if
      * needed by implementing this method.
      */
     protected void onRestore() {
-        IActionsCache<UiAction> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
+        Debug.waitForDebugger();
+        IActionsCache<U> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
         mPendingActions = actionsCache.restoreActions();
+
+        for (UiAction action : mPendingActions) {
+            IRestoreLambdaCaller restoreLambdaCaller = sRestoreLambdaCallerFactory.create(action);
+            restoreLambdaCaller.restore(this, action);
+        }
     }
 
     /**
@@ -65,12 +82,12 @@ public abstract class Presenter<U extends UiElement> {
      * Set the ui element to the pending UI actions and execute them.
      */
     private void executePendingUiActions() {
-        for (UiAction action : mPendingActions) {
-            action.act();
+        for (UiAction<U> action : mPendingActions) {
+            action.act(mUi);
         }
 
         mPendingActions.clear();
-        IActionsCache<UiAction> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
+        IActionsCache<U> actionsCache = ActionsCacheProvider.newInstance().provide(mUuid);
         actionsCache.delete();
     }
 
@@ -96,11 +113,10 @@ public abstract class Presenter<U extends UiElement> {
      * again.
      * @param action The actions to execute.
      */
-    protected void post(UiAction action) {
+    protected void post(UiAction<U> action) {
         if (isAttached) {
-            action.act();
-        } else if (!isRemoved){
-            //if presenter is going to be removed we do not want to cache actions
+            action.act(mUi);
+        } else if (!isRemoved){//if presenter is going to be removed we do not want to cache actions
 
             mPendingActions.add(action);
 
@@ -109,7 +125,7 @@ public abstract class Presenter<U extends UiElement> {
             IDataProvider dataProvider = DataProvider.newInstance();
             dataProvider.store(mUuid, this);
 
-            IActionsCache<UiAction> actionsCache =
+            IActionsCache<U> actionsCache =
                     ActionsCacheProvider.newInstance().provide(mUuid);
             actionsCache.saveActions(mPendingActions);
         }
@@ -123,25 +139,15 @@ public abstract class Presenter<U extends UiElement> {
      * Define an action (or a set of actions) that we want to perform to the UI Element when it is
      * available.
      */
-    public interface UiAction {
+    @FunctionalInterface
+    public interface UiAction<U> {
 
         /**
-         * Perform the UI actions that we want to execute. In order to get the UI element you must
-         * call {@link #getUi()}.
+         * Perform the UI actions that we want to execute.
+         * @param ui The presenter's ui. It will be injected by internal implementation
          */
-        void act();
+        void act(U ui);
 
-    }
-
-
-    /**
-     * Get the UI element to which we want to act. The UI element is loaded when the presenter
-     * is being attached. Use this method only {@link UiAction}.
-     *
-     * @return The ui element
-     */
-    protected final U getUi() {
-        return mUi;
     }
 
 }

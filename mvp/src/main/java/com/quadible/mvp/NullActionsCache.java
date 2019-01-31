@@ -16,8 +16,9 @@
 package com.quadible.mvp;
 
 import android.util.Log;
-
 import java.util.ArrayList;
+
+import com.quadible.mvp.Presenter.UiAction;
 
 /**
  *  <p>
@@ -26,12 +27,12 @@ import java.util.ArrayList;
  *      in case something really bad happens.
  *  </p>
  */
-class NullActionsCache<A extends Presenter.UiAction> implements IActionsCache<A> {
+class NullActionsCache<U extends UiElement> implements IActionsCache<U> {
 
     private static final String TAG = NullActionsCache.class.getName();
 
     @Override
-    public void saveActions(ArrayList<A> actions) {
+    public void saveActions(ArrayList<UiAction<U>> actions) {
         Log.d(TAG, "saveActions() called with: actions = [" + actions + "]");
         throw new RuntimeException("Tried to save with NullActionsCache");
     }
@@ -41,7 +42,7 @@ class NullActionsCache<A extends Presenter.UiAction> implements IActionsCache<A>
      * @return Empty list
      */
     @Override
-    public ArrayList<A> restoreActions() {
+    public ArrayList<UiAction<U>> restoreActions() {
         Log.d(TAG, "restoreActions() called");
         return new ArrayList<>();
     }

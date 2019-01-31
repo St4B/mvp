@@ -26,19 +26,19 @@ import java.util.ArrayList;
  *     The logic is to have one {@link IActionsCache} per {@link Presenter}.
  * </p>
  */
-interface IActionsCache<A extends UiAction> {
+interface IActionsCache<U extends UiElement> {
 
     /**
      * Save {@link Presenter}'s pending actions in a persistent storage.
      * @param actions Actions that we want to save.
      */
-    void saveActions(ArrayList<A> actions);
+    void saveActions(ArrayList<UiAction<U>> actions);
 
     /**
      * Return pending actions from the persistent storage. Used after {@link Presenter} was restored.
      * @return The pending actions that were stored.
      */
-    ArrayList<A> restoreActions();
+    ArrayList<UiAction<U>> restoreActions();
 
     /**
      * Delete actions from persistent storage.
